@@ -5,8 +5,8 @@ import logo from "../../assets/logo.png";
 import logout from "../../assets/logout.png";
 import registration from "../../assets/registration.png";
 
-var isLogined = true;
-var isUserVolunteer = false;
+let isLogined: boolean = true;
+let isUserVolunteer: boolean = false;
 
 export const Header = () => {
 	const navigate = useNavigate();

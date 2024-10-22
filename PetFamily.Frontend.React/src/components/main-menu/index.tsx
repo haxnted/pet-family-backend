@@ -29,7 +29,7 @@ function CustomTabPanel(props: TabPanelProps) {
 	);
 }
 
-function a11yProps(index: number) {
+function GetProps(index: number) {
 	return {
 		id: `simple-tab-${index}`,
 		"aria-controls": `simple-tabpanel-${index}`,
@@ -76,7 +76,7 @@ export default function MainNavBar() {
 								Главная
 							</div>
 						}
-						{...a11yProps(0)}
+						{...GetProps(0)}
 						sx={{
 							"&.Mui-selected": {
 								color: "orange",
@@ -90,7 +90,7 @@ export default function MainNavBar() {
 								Волонтеры
 							</div>
 						}
-						{...a11yProps(1)}
+						{...GetProps(1)}
 						sx={{
 							"&.Mui-selected": {
 								color: "orange",
@@ -104,7 +104,7 @@ export default function MainNavBar() {
 								Помощь животным
 							</div>
 						}
-						{...a11yProps(2)}
+						{...GetProps(2)}
 						sx={{
 							"&.Mui-selected": {
 								color: "orange",
