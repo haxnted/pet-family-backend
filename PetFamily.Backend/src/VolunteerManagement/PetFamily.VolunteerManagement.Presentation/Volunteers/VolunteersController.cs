@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using PetFamily.Core.Dto;
 using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
 using PetFamily.SharedKernel;
 using PetFamily.VolunteerManagement.Application.Commands.AddFilesPet;
 using PetFamily.VolunteerManagement.Application.Commands.AddPet;

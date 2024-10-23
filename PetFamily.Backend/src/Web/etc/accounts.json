@@ -1,5 +1,5 @@
 {
-  "Roles:": {
+  "Roles": {
     "Volunteer": [
       "volunteer.update",
       "volunteer.delete"
@@ -13,7 +13,7 @@
       "species.delete"
     ]
   },
-  "Permissions:": {
+  "Permissions": {
     "Volunteer": [
       "volunteer.create",
       "volunteer.update",

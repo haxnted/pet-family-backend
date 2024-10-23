@@ -18,6 +18,7 @@ public static class DependencyInjection
         collection.AddAuthFieldInSwagger();
         collection.AddJwtAuthentication();
         collection.AddCustomAuthorization();
+        collection.AddHttpLogging(u => { u.CombineLogs = true; });
         return collection;
     }
 

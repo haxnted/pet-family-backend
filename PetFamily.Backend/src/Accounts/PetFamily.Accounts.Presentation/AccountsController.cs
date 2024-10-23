@@ -4,13 +4,14 @@ using PetFamily.Accounts.Application.Commands.Register;
 
 using PetFamily.Accounts.Presentation.Requests;
 using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Presentation;
 
 public class AccountsController : ApplicationController
 {
     //test
-    [Permission("create.pet")]
+    [Permission("species.create")]
     [HttpPost("admin")]
     public IActionResult CreatePet()
     {
@@ -18,7 +19,7 @@ public class AccountsController : ApplicationController
     }
     
     //test
-    [Permission("delete.pet")]
+    [Permission("volunteer.create")]
     [HttpPost("user")]
     public IActionResult DeletePet()
     {
