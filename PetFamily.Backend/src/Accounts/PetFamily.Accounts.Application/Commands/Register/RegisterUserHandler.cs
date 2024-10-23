@@ -14,6 +14,7 @@ using PetFamily.SharedKernel.ValueObjects;
 namespace PetFamily.Accounts.Application.Commands.Register;
 
 public class RegisterUserHandler(
+    IAccountsUnitOfWork unitOfWork,
     IParticipantAccountManager accountManager,
     UserManager<User> userManager,
     RoleManager<Role> roleManager,
@@ -35,21 +36,33 @@ public class RegisterUserHandler(
         if (role is null)
             return Errors.General.NotFound().ToErrorList();
 
-        var user = User.CreateParticipant(command.UserName, command.Email, role);
+        var transaction = await unitOfWork.BeginTransaction(cancellationToken);
+        try
+        {
+            var user = User.CreateParticipant(command.UserName, command.Email, role);
 
-        var result = await userManager.CreateAsync(user, command.Password);
+            var result = await userManager.CreateAsync(user, command.Password);
+            if (result.Succeeded)
+            {
+                logger.LogInformation("User {UserName} has created a new account", command.UserName);
+                return UnitResult.Success<ErrorList>();
+            }
 
-        var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
-        var participantAccount = new ParticipantAccount(fullname, user);    
+            var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
+            var participantAccount = new ParticipantAccount(fullname, user);
+            await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
 
-        await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
+            await unitOfWork.SaveChanges(cancellationToken);
+            transaction.Commit();
 
-        if (result.Succeeded) {
-            logger.LogInformation("User {UserName} has created a new account", command.UserName);
-            return UnitResult.Success<ErrorList>();
+            var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
+            return new ErrorList(errors);
         }
-
-        var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
-        return new ErrorList(errors);
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            logger.Log(LogLevel.Critical, "Error during user registration {ex}", ex);
+            return Error.Failure("Error.during.user.registration", "Error during user registration").ToErrorList();
+        }
     }
 }
