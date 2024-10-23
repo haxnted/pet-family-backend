@@ -1,9 +1,8 @@
 ﻿using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Accounts.Domain;
-using PetFamily.Core.Extensions;
+using PetFamily.Accounts.Domain.TypeAccounts;
+using PetFamily.Core.Convertors;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 
@@ -32,7 +31,7 @@ public class VolunteerAccountConfiguration : IEntityTypeConfiguration<VolunteerA
             .HasConversion(
                 u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
                 json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!,
-                EfCoreFluentApiExtensions.CreateValueComparer<List<Requisite>>())
+                ValueComparerConvertor.CreateValueComparer<Requisite>())
             .HasColumnName("requisites");
     }
 }

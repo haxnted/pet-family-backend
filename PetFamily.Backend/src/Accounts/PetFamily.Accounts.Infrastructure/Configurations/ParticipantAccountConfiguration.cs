@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.SharedKernel;
 
 namespace PetFamily.Accounts.Infrastructure.Configurations;

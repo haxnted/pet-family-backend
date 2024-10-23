@@ -13,8 +13,8 @@ using PetFamily.Species.Infrastructure;
 namespace PetFamily.Species.Infrastructure.Migrations
 {
     [DbContext(typeof(SpeciesWriteDbContext))]
-    [Migration("20241020115332_init")]
-    partial class init
+    [Migration("20241022182131_Species_Initial")]
+    partial class Species_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

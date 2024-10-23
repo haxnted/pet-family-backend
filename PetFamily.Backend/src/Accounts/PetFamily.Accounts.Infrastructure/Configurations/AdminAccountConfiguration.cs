@@ -1,14 +1,15 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.SharedKernel;
 
 namespace PetFamily.Accounts.Infrastructure.Configurations;
 
-public class AdminProfileConfiguration : IEntityTypeConfiguration<AdminProfile>
+public class AdminAccountConfiguration : IEntityTypeConfiguration<AdminAccount>
 {
-    public void Configure(EntityTypeBuilder<AdminProfile> builder)
+    public void Configure(EntityTypeBuilder<AdminAccount> builder)
     {
+        builder.ToTable("admin_accounts");
         builder.HasKey(b => b.Id);
         builder.ComplexProperty(pa => pa.FullName, pab =>
         {

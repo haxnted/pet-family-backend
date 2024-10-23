@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetFamily.Accounts.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Account_Init : Migration
+    public partial class Accounts_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -72,8 +72,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 columns: table => new
                 {
                     role_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    permission_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    permission_id1 = table.Column<Guid>(type: "uuid", nullable: true)
+                    permission_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -85,12 +84,6 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         principalTable: "permissions",
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "fk_role_permissions_permissions_permission_id1",
-                        column: x => x.permission_id1,
-                        principalSchema: "accounts",
-                        principalTable: "permissions",
-                        principalColumn: "id");
                     table.ForeignKey(
                         name: "fk_role_permissions_roles_role_id",
                         column: x => x.role_id,
@@ -137,7 +130,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "admin_profile",
+                name: "admin_accounts",
                 schema: "accounts",
                 columns: table => new
                 {
@@ -149,9 +142,9 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_admin_profile", x => x.id);
+                    table.PrimaryKey("pk_admin_accounts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_admin_profile_asp_net_users_user_id",
+                        name: "fk_admin_accounts_asp_net_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "accounts",
                         principalTable: "users",
@@ -302,9 +295,9 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_admin_profile_user_id",
+                name: "ix_admin_accounts_user_id",
                 schema: "accounts",
-                table: "admin_profile",
+                table: "admin_accounts",
                 column: "user_id");
 
             migrationBuilder.CreateIndex(
@@ -331,12 +324,6 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                 schema: "accounts",
                 table: "role_permissions",
                 column: "permission_id");
-
-            migrationBuilder.CreateIndex(
-                name: "ix_role_permissions_permission_id1",
-                schema: "accounts",
-                table: "role_permissions",
-                column: "permission_id1");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -393,7 +380,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "admin_profile",
+                name: "admin_accounts",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
