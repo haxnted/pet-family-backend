@@ -4,20 +4,22 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Domain.TypeAccounts;
 
 namespace PetFamily.Accounts.Infrastructure;
 
-public class AuthorizationDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
+public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
 {
     private const string DATABASE = "PetFamilyDatabase";
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Permission> Permissions => Set<Permission>();
+    public DbSet<AdminAccount> Admins => Set<AdminAccount>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("accounts");
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(AuthorizationDbContext).Assembly,
+            typeof(AccountsDbContext).Assembly,
             type => type.FullName?.Contains("Configurations") ?? false);
         
         modelBuilder.Entity<User>()
