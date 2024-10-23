@@ -23,4 +23,8 @@
         <ProjectReference Include="..\PetFamily.Accounts.Domain\PetFamily.Accounts.Domain.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Migrations\" />
+    </ItemGroup>
+
 </Project>

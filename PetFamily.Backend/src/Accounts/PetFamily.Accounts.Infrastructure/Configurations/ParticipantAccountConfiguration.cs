@@ -10,6 +10,7 @@ public class ParticipantAccountConfiguration : IEntityTypeConfiguration<Particip
 {
     public void Configure(EntityTypeBuilder<ParticipantAccount> builder)
     {
+        builder.ToTable("participant_accounts");
         builder.HasKey(b => b.Id);
         builder.ComplexProperty(pa => pa.FullName, pab =>
             {

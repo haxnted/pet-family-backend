@@ -2,10 +2,16 @@
   "Roles": {
     "Volunteer": [
       "volunteer.update",
-      "volunteer.delete"
+      "volunteer.delete",
+      "volunteer.update.requisites",
+      "user.update.sociallinks",
+      "volunteer.pet.delete",
+      "volunteer.pet.create",
+      "volunteer.pet.update"
     ],
     "Participant": [
-      "volunteer.create"
+      "volunteer.create",
+      "user.update.sociallinks"
     ],
     "Admin": [
       "species.create",
@@ -15,12 +21,17 @@
   },
   "Permissions": {
     "Volunteer": [
-      "volunteer.create",
       "volunteer.update",
-      "volunteer.delete"
+      "volunteer.delete",
+      "volunteer.update.requisites",
+      "user.update.sociallinks",
+      "volunteer.pet.delete",
+      "volunteer.pet.create",
+      "volunteer.pet.update"
     ],
     "Participant": [
-      "volunteer.create"
+      "volunteer.create",
+      "user.update.sociallinks"
     ],
     "Admin": [
       "species.create",

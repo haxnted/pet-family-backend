@@ -27,6 +27,7 @@ public static class DependencyInjection
         collection.AddScoped<AdminAccountManager>();
         collection.AddScoped<IAccountsUnitOfWork, AccountsUnitOfWork>();
         collection.AddScoped<IParticipantAccountManager, ParticipantAccountManager>();
+        collection.AddScoped<IVolunteerAccountManager, VolunteerAccountManager>();
         collection.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         collection.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
         return collection;
@@ -46,8 +47,9 @@ public static class DependencyInjection
             })
             .AddEntityFrameworkStores<AccountsDbContext>();
     }
+
     private static void AddEnv(this IServiceCollection collection, IConfiguration configuration)
-    { 
+    {
         collection.Configure<AdminOptions>(configuration.GetSection(AdminOptions.ADMIN));
     }
 }

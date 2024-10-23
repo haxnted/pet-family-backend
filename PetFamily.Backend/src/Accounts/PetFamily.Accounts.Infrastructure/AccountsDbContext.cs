@@ -15,9 +15,11 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<AdminAccount> Admins => Set<AdminAccount>();
     public DbSet<ParticipantAccount> Participants => Set<ParticipantAccount>();
+    public DbSet<VolunteerAccount> Volunteers => Set<VolunteerAccount>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("accounts");
+        
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(
             typeof(AccountsDbContext).Assembly,

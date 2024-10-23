@@ -303,12 +303,12 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id")
-                        .HasName("pk_participant_account");
+                        .HasName("pk_participant_accounts");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_participant_account_user_id");
+                        .HasDatabaseName("ix_participant_accounts_user_id");
 
-                    b.ToTable("participant_account", "accounts");
+                    b.ToTable("participant_accounts", "accounts");
                 });
 
             modelBuilder.Entity("PetFamily.Accounts.Domain.TypeAccounts.VolunteerAccount", b =>
@@ -354,12 +354,12 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id")
-                        .HasName("pk_volunteer_account");
+                        .HasName("pk_volunteers");
 
                     b.HasIndex("UserId")
-                        .HasDatabaseName("ix_volunteer_account_user_id");
+                        .HasDatabaseName("ix_volunteers_user_id");
 
-                    b.ToTable("volunteer_account", "accounts");
+                    b.ToTable("volunteers", "accounts");
                 });
 
             modelBuilder.Entity("PetFamily.Accounts.Domain.User", b =>
@@ -557,7 +557,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_participant_account_asp_net_users_user_id");
+                        .HasConstraintName("fk_participant_accounts_asp_net_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -569,7 +569,7 @@ namespace PetFamily.Accounts.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_volunteer_account_asp_net_users_user_id");
+                        .HasConstraintName("fk_volunteers_users_user_id");
 
                     b.Navigation("User");
                 });
