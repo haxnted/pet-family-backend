@@ -42,21 +42,21 @@ public class RegisterUserHandler(
             var user = User.CreateParticipant(command.UserName, command.Email, role);
 
             var result = await userManager.CreateAsync(user, command.Password);
-            if (result.Succeeded)
+            if (result.Succeeded == false)
             {
-                logger.LogInformation("User {UserName} has created a new account", command.UserName);
-                return UnitResult.Success<ErrorList>();
+                var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
+                return new ErrorList(errors);
             }
 
             var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
             var participantAccount = new ParticipantAccount(fullname, user);
             await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
 
-            await unitOfWork.SaveChanges(cancellationToken);
             transaction.Commit();
-
-            var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
-            return new ErrorList(errors);
+            await unitOfWork.SaveChanges(cancellationToken);
+            logger.LogInformation("User {UserName} has created a new account", command.UserName);
+            
+            return UnitResult.Success<ErrorList>();
         }
         catch (Exception ex)
         {
