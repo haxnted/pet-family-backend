@@ -14,6 +14,7 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
     public DbSet<Permission> Permissions => Set<Permission>();
     public DbSet<AdminAccount> Admins => Set<AdminAccount>();
+    public DbSet<ParticipantAccount> Participants => Set<ParticipantAccount>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("accounts");

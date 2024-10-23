@@ -4,14 +4,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
 using PetFamily.Framework;
 using PetFamily.SharedKernel;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Accounts.Application.Commands.Register;
 
 public class RegisterUserHandler(
+    IParticipantAccountManager accountManager,
     UserManager<User> userManager,
     RoleManager<Role> roleManager,
     IValidator<RegisterUserCommand> validator,
@@ -32,19 +35,16 @@ public class RegisterUserHandler(
         if (role is null)
             return Errors.General.NotFound().ToErrorList();
 
-        var user = new User
-        {
-            PhotoPath = "",
-            SocialLinks = [],
-            UserName = command.UserName,
-            Email = command.Email,
-            Role = role
-        };
+        var user = User.CreateParticipant(command.UserName, command.Email, role);
 
         var result = await userManager.CreateAsync(user, command.Password);
 
-        if (result.Succeeded)
-        {
+        var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
+        var participantAccount = new ParticipantAccount(fullname, user);    
+
+        await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
+
+        if (result.Succeeded) {
             logger.LogInformation("User {UserName} has created a new account", command.UserName);
             return UnitResult.Success<ErrorList>();
         }

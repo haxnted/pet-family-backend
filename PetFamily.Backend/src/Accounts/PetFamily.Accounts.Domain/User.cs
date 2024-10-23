@@ -20,4 +20,16 @@ public class User : IdentityUser<Guid>
             Role = role
         };
     }
+    
+    public static User CreateParticipant(string userName, string email, Role role)
+    {
+        return new User
+        {
+            PhotoPath = "",
+            SocialLinks = [],
+            UserName = userName,
+            Email = email,
+            Role = role
+        };
+    }
 }

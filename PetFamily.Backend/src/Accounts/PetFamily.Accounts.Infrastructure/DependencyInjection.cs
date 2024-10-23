@@ -25,6 +25,7 @@ public static class DependencyInjection
         collection.AddScoped<PermissionManager>();
         collection.AddScoped<AccountSeederService>();
         collection.AddScoped<AdminAccountManager>();
+        collection.AddScoped<IParticipantAccountManager, ParticipantAccountManager>();
         collection.AddSingleton<IAuthorizationHandler, PermissionRequirementHandler>();
         collection.AddSingleton<IAuthorizationPolicyProvider, PermissionPolicyProvider>();
         return collection;
