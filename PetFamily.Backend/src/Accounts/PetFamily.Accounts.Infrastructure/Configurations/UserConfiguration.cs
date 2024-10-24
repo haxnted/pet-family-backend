@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetFamily.Accounts.Domain;
 using PetFamily.Core.Convertors;
+using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 
 
@@ -23,5 +24,18 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             .WithMany(r => r.Users)
             .HasForeignKey(u => u.RoleId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        builder.ComplexProperty(pa => pa.FullName, pab =>
+        {
+            pab.Property(f => f.Name)
+                .HasMaxLength(Constants.MIN_TEXT_LENGTH)
+                .HasColumnName("name");
+            pab.Property(f => f.Surname)
+                .HasMaxLength(Constants.MIN_TEXT_LENGTH)
+                .HasColumnName("surname");
+            pab.Property(f => f.Patronymic)
+                .HasMaxLength(Constants.MIN_TEXT_LENGTH)
+                .HasColumnName("patronymic");
+        });
     }
 }

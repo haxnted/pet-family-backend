@@ -39,17 +39,11 @@ public class RegisterUserHandler(
         var transaction = await unitOfWork.BeginTransaction(cancellationToken);
         try
         {
-            var user = User.CreateParticipant(command.UserName, command.Email, role);
+            var user = await CreateUser(command, role);
+            if (user.IsFailure)
+                return user.Error;
 
-            var result = await userManager.CreateAsync(user, command.Password);
-            if (result.Succeeded == false)
-            {
-                var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
-                return new ErrorList(errors);
-            }
-
-            var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
-            var participantAccount = new ParticipantAccount(fullname, user);
+            var participantAccount = new ParticipantAccount(user.Value);
             await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
 
             transaction.Commit();
@@ -64,5 +58,24 @@ public class RegisterUserHandler(
             logger.Log(LogLevel.Critical, "Error during user registration {ex}", ex);
             return Error.Failure("Error.during.user.registration", "Error during user registration").ToErrorList();
         }
+    }
+
+    private async Task<Result<User, ErrorList>> CreateUser(RegisterUserCommand command, Role role)
+    {
+        FullName fullName;
+        if (!string.IsNullOrWhiteSpace(command.Name) && !string.IsNullOrWhiteSpace(command.Surname))
+            fullName = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
+        else
+            fullName = FullName.Create("name", "surname", null).Value;
+            
+        var user = User.CreateParticipant(fullName, command.UserName, command.Email, role);
+        var result = await userManager.CreateAsync(user, command.Password);
+        
+        if (result.Succeeded != false) 
+            return user;
+        
+        var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
+        return new ErrorList(errors);
+
     }
 }

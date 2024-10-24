@@ -4,6 +4,7 @@ public class Permissions
 {
     public static class User
     {
+        public const string UpdateFullName = "user.update.fullname";
         public const string UpdateSocialLinks = "user.update.sociallinks";
     }
     

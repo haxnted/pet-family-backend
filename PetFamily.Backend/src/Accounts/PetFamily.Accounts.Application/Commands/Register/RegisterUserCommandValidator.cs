@@ -10,7 +10,8 @@ public class RegisterUserCommandValidator : AbstractValidator<RegisterUserComman
     public RegisterUserCommandValidator()
     {
         RuleFor(r => new { r.Name, r.Surname, r.Patronymic })
-            .MustBeValueObject(r => FullName.Create(r.Name, r.Surname, r.Patronymic));
+            .MustBeValueObject(r => FullName.Create(r.Name, r.Surname, r.Patronymic))
+            .When(r => !string.IsNullOrEmpty(r.Name) && !string.IsNullOrEmpty(r.Surname));
 
         RuleFor(r => r.Email)
             .NotEmpty().WithError(Errors.General.ValueIsRequired("email"))

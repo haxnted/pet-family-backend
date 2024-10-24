@@ -39,22 +39,23 @@ public class AccountSeederService(
         var isAdminExists = await userManager.FindByEmailAsync(adminOptions.Value.Email);
         if (isAdminExists is not null)
             return;
-        
+
         logger.LogInformation("Seeding admin...");
         var role = await roleManager.FindByNameAsync(Roles.Admin);
         if (role is null)
             throw new ArgumentException("admin role not exists");
 
-        var user = User.CreateAdmin(adminOptions.Value.UserName, adminOptions.Value.Email, role);
-        await userManager.CreateAsync(user, adminOptions.Value.Password);
-
-        var fullName = FullName.Create(adminOptions.Value.Name, 
+        var fullName = FullName.Create(adminOptions.Value.Name,
             adminOptions.Value.Surname,
             adminOptions.Value.Patronymic);
+
         if (fullName.IsFailure)
             throw new ArgumentException(fullName.Error.Message);
-        
-        var adminAccount = new AdminAccount(fullName.Value, user);
+
+        var user = User.CreateAdmin(fullName.Value, adminOptions.Value.UserName, adminOptions.Value.Email, role);
+        await userManager.CreateAsync(user, adminOptions.Value.Password);
+
+        var adminAccount = new AdminAccount(user);
 
         await adminAccountManager.CreateAdminAccountAsync(adminAccount, cancellationToken);
 

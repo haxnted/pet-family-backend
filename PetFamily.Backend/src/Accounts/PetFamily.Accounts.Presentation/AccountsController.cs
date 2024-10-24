@@ -8,6 +8,7 @@ using PetFamily.Accounts.Application.Commands.Login;
 using PetFamily.Accounts.Application.Commands.Register;
 using PetFamily.Accounts.Application.Commands.UpdateAccountRequisites;
 using PetFamily.Accounts.Application.Commands.UpdateAccountSocialLinks;
+using PetFamily.Accounts.Application.Commands.UpdateFullName;
 using PetFamily.Accounts.Domain;
 using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.Accounts.Presentation.Requests;
@@ -94,6 +95,22 @@ public class AccountsController : ApplicationController
         return Ok();
     }
 
+    [Permission(Permissions.User.UpdateFullName)]
+    [HttpPatch("{userId:guid}/full-name")]
+    public async Task<IActionResult> UpdateFullName(
+        [FromBody] FullNameDto request,
+        [FromRoute] Guid userId,
+        [FromServices] UpdateFullNameHandler handler,
+        CancellationToken cancellationToken
+        )
+    {
+        var result = await handler.Execute(new UpdateFullNameCommand(userId, request), cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok();
+    }
+
     //test volunteer methods
     [HttpPost("registration-volunteer")]
     public async Task<IActionResult> CreateVolunteer(
@@ -118,7 +135,8 @@ public class AccountsController : ApplicationController
         if (role is null)
             return BadRequest("уже есть але");
 
-        var user = Domain.User.CreateParticipant(command.UserName, command.Email, role);
+        var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
+        var user = Domain.User.CreateParticipant(fullname, command.UserName, command.Email, role);
 
         var result = await userManager.CreateAsync(user, command.Password);
         if (result.Succeeded == false)
@@ -126,8 +144,7 @@ public class AccountsController : ApplicationController
             return BadRequest("уже есть але");
         }
 
-        var fullname = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
-        var participantAccount = new VolunteerAccount(fullname, 5, [], user);
+        var participantAccount = new VolunteerAccount( 5, [], user);
         await accountManager.CreateVolunteerAccountAsync(participantAccount, cancellationToken);
         await unitOfWork.SaveChanges(cancellationToken);
 
