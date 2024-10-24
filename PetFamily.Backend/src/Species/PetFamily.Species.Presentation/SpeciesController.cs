@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
 using PetFamily.SharedKernel;
 using PetFamily.Species.Application.Commands.AddBreedToSpecies;
 using PetFamily.Species.Application.Commands.AddSpecies;

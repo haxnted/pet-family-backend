@@ -5,10 +5,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Domain;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Infrastructure.Providers;
 
-public class TokenProvider(IOptions<JwtOptions> options) : ITokenProvider
+public class JwtTokenProvider(IOptions<JwtOptions> options) : ITokenProvider
 {
     public string GenerateAccessToken(User user, CancellationToken cancellationToken)
     {
@@ -20,9 +21,7 @@ public class TokenProvider(IOptions<JwtOptions> options) : ITokenProvider
             
             new(CustomClaims.Id, user.Id.ToString()), 
             new (CustomClaims.Email, user.Email ?? ""),
-            new (CustomClaims.Role, "volunteer"),
-            new ("permission", "create.pet"),
-            new ("permission", "delete.pet")
+            new (CustomClaims.UserName, user.UserName ?? "")
         ];
 
         var jwtToken = new JwtSecurityToken(issuer: options.Value.Issuer,

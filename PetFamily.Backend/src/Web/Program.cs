@@ -1,3 +1,4 @@
+using PetFamily.Accounts.Infrastructure.Seeding;
 using PetFamily.Accounts.Presentation;
 using PetFamily.Species.Infrastructure;
 using PetFamily.Species.Presentation;
@@ -8,6 +9,7 @@ using Web;
 using Web.Extensions;
 using Web.Middlewares;
 
+DotNetEnv.Env.Load();
 var builder = WebApplication.CreateBuilder(args);
 
 builder.AddConfigureLogging();
@@ -16,17 +18,13 @@ builder.Services
     .AddSpeciesModule(builder.Configuration)
     .AddVolunteerModule(builder.Configuration)
     .AddAccountsModule(builder.Configuration)
-    .AddWeb()
-    .AddHttpLogging(u =>
-    {
-        u.CombineLogs = true;
-    });
-
-
+    .AddWeb();
 
 var app = builder.Build();
 
 app.UseExceptionMiddleware();
+var accountSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+await accountSeeder.SeedAsync();
 
 if (app.Environment.IsDevelopment())
 {

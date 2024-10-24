@@ -1,16 +1,23 @@
 ﻿using CSharpFunctionalExtensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.Core.Abstractions;
 using PetFamily.Core.Extensions;
+using PetFamily.Framework;
 using PetFamily.SharedKernel;
+using PetFamily.SharedKernel.ValueObjects;
 
 namespace PetFamily.Accounts.Application.Commands.Register;
 
 public class RegisterUserHandler(
+    IAccountsUnitOfWork unitOfWork,
+    IParticipantAccountManager accountManager,
     UserManager<User> userManager,
+    RoleManager<Role> roleManager,
     IValidator<RegisterUserCommand> validator,
     ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
 {
@@ -20,31 +27,52 @@ public class RegisterUserHandler(
         var validationResult = await validator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid)
             return validationResult.ToList();
-        
-        var existsUser = await userManager.FindByNameAsync(command.Email);
-        if (existsUser != null)
-            return Errors.General.AlreadyExist("email").ToErrorList();
 
         var existsUserWithUserName = await userManager.FindByNameAsync(command.UserName);
         if (existsUserWithUserName != null)
             return Errors.General.AlreadyExist("username").ToErrorList();
-        
-        var user = new User
+
+        var role = await roleManager.Roles.FirstOrDefaultAsync(r => r.Name == Roles.Participant, cancellationToken);
+        if (role is null)
+            return Errors.General.NotFound().ToErrorList();
+
+        var transaction = await unitOfWork.BeginTransaction(cancellationToken);
+        try
         {
-            PhotoPath = "",
-            SocialLinks = [],
-            UserName = command.UserName, 
-            Email = command.Email
-        };
-        
-        
-        var result = await userManager.CreateAsync(user, command.Password);
-        await userManager.AddToRoleAsync(user, "Participant");
-        if (result.Succeeded)
-        {
+            var user = await CreateUser(command, role);
+            if (user.IsFailure)
+                return user.Error;
+
+            var participantAccount = new ParticipantAccount(user.Value);
+            await accountManager.CreateParticipantAccountAsync(participantAccount, cancellationToken);
+
+            transaction.Commit();
+            await unitOfWork.SaveChanges(cancellationToken);
             logger.LogInformation("User {UserName} has created a new account", command.UserName);
+            
             return UnitResult.Success<ErrorList>();
         }
+        catch (Exception ex)
+        {
+            transaction.Rollback();
+            logger.Log(LogLevel.Critical, "Error during user registration {ex}", ex);
+            return Error.Failure("Error.during.user.registration", "Error during user registration").ToErrorList();
+        }
+    }
+
+    private async Task<Result<User, ErrorList>> CreateUser(RegisterUserCommand command, Role role)
+    {
+        FullName fullName;
+        if (!string.IsNullOrWhiteSpace(command.Name) && !string.IsNullOrWhiteSpace(command.Surname))
+            fullName = FullName.Create(command.Name, command.Surname, command.Patronymic).Value;
+        else
+            fullName = FullName.Create("name", "surname", null).Value;
+            
+        var user = User.CreateParticipant(fullName, command.UserName, command.Email, role);
+        var result = await userManager.CreateAsync(user, command.Password);
+        
+        if (result.Succeeded != false) 
+            return user;
         
         var errors = result.Errors.Select(e => Error.Failure(e.Code, e.Description)).ToList();
         return new ErrorList(errors);

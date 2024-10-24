@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using PetFamily.Framework;
+using PetFamily.Framework.Authorization;
 
 namespace PetFamily.Accounts.Infrastructure;
 
@@ -12,22 +12,18 @@ public class PermissionPolicyProvider
             return Task.FromResult<AuthorizationPolicy?>(null);
 
         var policy = new AuthorizationPolicyBuilder()
+            .RequireAuthenticatedUser()
             .AddRequirements(new PermissionAttribute(policyName))
             .Build();
 
         return Task.FromResult<AuthorizationPolicy?>(policy);
     }
 
-    public Task<AuthorizationPolicy> GetDefaultPolicyAsync()
-    {
-        return Task.FromResult<AuthorizationPolicy>(
-            new AuthorizationPolicyBuilder()
+    public Task<AuthorizationPolicy> GetDefaultPolicyAsync() =>
+        Task.FromResult(new AuthorizationPolicyBuilder()
             .RequireAuthenticatedUser()
             .Build());
-    }
 
-    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync()
-    {
-        return Task.FromResult<AuthorizationPolicy?>(null);
-    }
+    public Task<AuthorizationPolicy?> GetFallbackPolicyAsync() => 
+        Task.FromResult<AuthorizationPolicy?>(null);
 }
