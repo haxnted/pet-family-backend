@@ -16,6 +16,7 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
     public DbSet<AdminAccount> Admins => Set<AdminAccount>();
     public DbSet<ParticipantAccount> Participants => Set<ParticipantAccount>();
     public DbSet<VolunteerAccount> Volunteers => Set<VolunteerAccount>();
+    public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("accounts");
