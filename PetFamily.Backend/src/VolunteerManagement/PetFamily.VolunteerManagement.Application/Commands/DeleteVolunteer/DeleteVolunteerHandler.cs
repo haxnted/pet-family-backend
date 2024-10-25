@@ -26,7 +26,8 @@ public class DeleteVolunteerHandler(
         if (volunteer.IsFailure)
             return volunteer.Error.ToErrorList();
 
-        volunteer.Value.Deactivate();
+        volunteer.Value.Delete();
+        
         await unitOfWork.SaveChanges(cancellationToken);
 
         logger.Log(LogLevel.Information, "Volunteer has been deactivated with Id {volunteerId}", volunteerId);

@@ -1,20 +1,15 @@
-﻿
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.EntityIds;
-using PetFamily.SharedKernel.Interfaces;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerManagement.Domain.Enums;
 using PetFamily.VolunteerManagement.Domain.ValueObjects;
 
 namespace PetFamily.VolunteerManagement.Domain.Entities;
 
-public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
+public class Pet : SoftDeletableEntity<PetId>
 {
     protected Pet(PetId id) : base(id) { }
-
-    private bool _isDeleted = false;
-    
     public NickName NickName { get; private set; } = null!;
     public Description GeneralDescription { get; private set;} = null!;
     public Description HealthInformation { get; private set;} = null!;
@@ -79,7 +74,7 @@ public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
         IReadOnlyList<Requisite> requisiteList
         )
     {
-        if (_isDeleted)
+        if (IsDeleted)
             return Error.Failure(
                 "failed.update.pet", 
                 "Unable to perform surgery because the animal is hidden");
@@ -106,13 +101,4 @@ public class Pet : SharedKernel.Entity<PetId>, ISoftDeletable
     public void UpdateFiles(List<PetPhoto> list) =>
         PetPhotoList = list.AsReadOnly();
     
-    public void Activate()
-    {
-        _isDeleted = false;
-    }
-
-    public void Deactivate()
-    {
-        _isDeleted = true;
-    }
 }
