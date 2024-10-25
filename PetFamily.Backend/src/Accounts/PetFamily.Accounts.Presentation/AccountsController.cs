@@ -1,10 +1,9 @@
-﻿using CSharpFunctionalExtensions;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Application.Commands.Login;
+using PetFamily.Accounts.Application.Commands.RefreshToken;
 using PetFamily.Accounts.Application.Commands.Register;
 using PetFamily.Accounts.Application.Commands.UpdateAccountRequisites;
 using PetFamily.Accounts.Application.Commands.UpdateAccountSocialLinks;
@@ -64,6 +63,21 @@ public class AccountsController : ApplicationController
         return Ok(result.Value);
     }
 
+    [HttpPost("refresh-token")]
+    public async Task<IActionResult> RefreshToken(
+        [FromBody] RefreshTokenRequest request,
+        [FromServices] RefreshTokenHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Execute(new RefreshTokenCommand(request.AccessToken, request.RefreshToken),
+            cancellationToken);
+        
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+
     [Permission(Permissions.User.UpdateSocialLinks)]
     [HttpPatch("{userId:guid}/social-links")]
     public async Task<IActionResult> UpdateAccountSocialLinks(
@@ -102,7 +116,7 @@ public class AccountsController : ApplicationController
         [FromRoute] Guid userId,
         [FromServices] UpdateFullNameHandler handler,
         CancellationToken cancellationToken
-        )
+    )
     {
         var result = await handler.Execute(new UpdateFullNameCommand(userId, request), cancellationToken);
         if (result.IsFailure)
@@ -144,7 +158,7 @@ public class AccountsController : ApplicationController
             return BadRequest("уже есть але");
         }
 
-        var participantAccount = new VolunteerAccount( 5, [], user);
+        var participantAccount = new VolunteerAccount(5, [], user);
         await accountManager.CreateVolunteerAccountAsync(participantAccount, cancellationToken);
         await unitOfWork.SaveChanges(cancellationToken);
 
@@ -154,20 +168,14 @@ public class AccountsController : ApplicationController
     //test
     [HttpGet("volunteer-jwt")]
     public async Task<IActionResult> GetVolunteerJwt(
-        ITokenProvider tokenProvider,
-        UserManager<User> userManager,
-        CancellationToken cancellationToken)
+        [FromServices] LoginHandler handler)
     {
         var command = new LoginUserCommand("volunteerTest@gmail.com", "zxcVolunteer001");
-        var existsUser = await userManager.FindByEmailAsync(command.Email);
-        if (existsUser is null)
-            return BadRequest();
 
-        var passwordCorrect = await userManager.CheckPasswordAsync(existsUser, command.Password);
-        if (!passwordCorrect)
-            return BadRequest();
-
-        var token = tokenProvider.GenerateAccessToken(existsUser, cancellationToken);
-        return Ok(token);
+        var result = await handler.Execute(command);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+        
+        return Ok(result.Value);
     }
 }
