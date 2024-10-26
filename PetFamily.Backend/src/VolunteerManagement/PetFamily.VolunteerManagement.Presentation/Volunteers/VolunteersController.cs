@@ -12,8 +12,6 @@ using PetFamily.VolunteerManagement.Application.Commands.RemoveHardPetById;
 using PetFamily.VolunteerManagement.Application.Commands.RemoveSoftPetById;
 using PetFamily.VolunteerManagement.Application.Commands.UpdateGeneralPetInfo;
 using PetFamily.VolunteerManagement.Application.Commands.UpdatePositionPet;
-using PetFamily.VolunteerManagement.Application.Commands.UpdateRequisites;
-using PetFamily.VolunteerManagement.Application.Commands.UpdateSocialLinks;
 using PetFamily.VolunteerManagement.Application.Commands.UpdateVolunteer;
 using PetFamily.VolunteerManagement.Application.Queries.GetVolunteerById;
 using PetFamily.VolunteerManagement.Application.Queries.GetVolunteersWithPagination;
@@ -87,38 +85,6 @@ public class VolunteersController : ApplicationController
             return result.Error.ToResponse();
 
         return Ok(new { Message = volunteerId });
-    }
-
-    [Permission(Permissions.Volunteer.Update)]
-    [HttpPatch("{volunteerId:guid}/social-links")]
-    public async Task<ActionResult> UpdateSocialLinks(
-        [FromRoute] Guid volunteerId,
-        [FromBody] IEnumerable<SocialLinkDto> request,
-        [FromServices] UpdateSocialLinksHandler handler,
-        CancellationToken cancellationToken)
-    {
-        var result = await handler.Execute(new UpdateSocialLinksCommand(volunteerId, request), cancellationToken);
-
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(volunteerId);
-    }
-
-    [Permission(Permissions.Volunteer.Update)]
-    [HttpPatch("{volunteerId:guid}/requisites")]
-    public async Task<ActionResult> UpdateRequisites(
-        [FromRoute] Guid volunteerId,
-        [FromBody] IEnumerable<RequisiteDto> request,
-        [FromServices] UpdateRequisitesHandler handler,
-        CancellationToken cancellationToken)
-    {
-        var result = await handler.Execute(new UpdateRequisitesCommand(volunteerId, request), cancellationToken);
-
-        if (result.IsFailure)
-            return result.Error.ToResponse();
-
-        return Ok(volunteerId);
     }
     
     [Permission(Permissions.Volunteer.UpdatePet)]
