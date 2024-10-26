@@ -49,7 +49,6 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
     {
         _pets.Add(pet);
         pet.ChangePosition(_pets.Count == 0 ? 1 : _pets.Count);
-        
     }
     
     public void HardRemovePet(Pet pet) =>
@@ -71,8 +70,10 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
             pet.Delete();
     }
 
-    public Pet? GetPetById(PetId petId) =>
-        _pets.FirstOrDefault(x => x.Id == petId);
+    public void HardRemoveAllPets() => 
+        _pets.Clear();
+    
+    public Pet? GetPetById(PetId petId) => _pets.FirstOrDefault(x => x.Id == petId);
 
     public void UpdateMainInfo(FullName fullName,
         Description generalDescription,

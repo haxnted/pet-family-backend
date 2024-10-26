@@ -5,7 +5,7 @@ public abstract class SoftDeletableEntity<TId> : Entity<TId> where TId : notnull
     protected SoftDeletableEntity(TId id) : base(id) { }
 
     protected bool IsDeleted { get; private set; }
-    public DateTime DeletedAt { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
     
     public virtual void Delete()
     {
@@ -16,7 +16,7 @@ public abstract class SoftDeletableEntity<TId> : Entity<TId> where TId : notnull
     public virtual void Restore()
     {
         IsDeleted = false;
-        DeletedAt = default;
+        DeletedAt = null;
     }
     
 }
