@@ -4,7 +4,7 @@ using PetFamily.Accounts.Application;
 
 namespace PetFamily.Accounts.Infrastructure;
 
-public class AccountsUnitOfWork(AccountsDbContext context) :  IAccountsUnitOfWork
+public class AccountsUnitOfWork(AccountsWriteDbContext context) :  IAccountsUnitOfWork
 {
     public async Task<IDbTransaction> BeginTransaction(CancellationToken token = default)
     {

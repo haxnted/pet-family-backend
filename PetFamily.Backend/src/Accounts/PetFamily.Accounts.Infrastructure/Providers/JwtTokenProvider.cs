@@ -15,7 +15,7 @@ namespace PetFamily.Accounts.Infrastructure.Providers;
 
 public class JwtTokenProvider(
     IOptions<JwtOptions> options,
-    AccountsDbContext context) : ITokenProvider
+    AccountsWriteDbContext context) : ITokenProvider
 {
     public JwtTokenResult GenerateAccessToken(User user)
     {

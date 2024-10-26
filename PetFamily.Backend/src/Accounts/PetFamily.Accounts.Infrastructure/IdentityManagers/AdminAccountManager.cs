@@ -2,7 +2,7 @@
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
-public class AdminAccountManager(AccountsDbContext context)
+public class AdminAccountManager(AccountsWriteDbContext context) 
 {
     public async Task CreateAdminAccountAsync(AdminAccount adminAccount, CancellationToken cancellationToken = default)
     {

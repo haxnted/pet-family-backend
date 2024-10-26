@@ -48,8 +48,9 @@ public static class DependencyInjection
     private static IServiceCollection ConfigureScopedServices(this IServiceCollection collection)
     {
         return collection.AddIdentityServices()
+            .AddScoped<IAccountsReadDbContext, AccountsReadDbContext>()
             .AddScoped<RolePermissionManager>()
-            .AddScoped<AccountsDbContext>()
+            .AddScoped<AccountsWriteDbContext>()
             .AddScoped<PermissionManager>()
             .AddScoped<AccountSeederService>()
             .AddScoped<AdminAccountManager>()
@@ -77,7 +78,7 @@ public static class DependencyInjection
                 options.Password.RequiredLength = 6;
                 options.Password.RequiredUniqueChars = 0;
             })
-            .AddEntityFrameworkStores<AccountsDbContext>();
+            .AddEntityFrameworkStores<AccountsWriteDbContext>();
 
         return collection;
     }

@@ -3,7 +3,7 @@ using PetFamily.Accounts.Domain;
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
-public class PermissionManager(AccountsDbContext context)
+public class PermissionManager(AccountsWriteDbContext context)
 {
     public async Task<Permission?> FindByCodeAsync(string code, CancellationToken cancellationToken = default) =>
         await context.Permissions.FirstOrDefaultAsync(p => p.Code == code, cancellationToken);

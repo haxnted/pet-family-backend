@@ -7,7 +7,7 @@ using PetFamily.SharedKernel;
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
 public class RefreshSessionManager(
-    AccountsDbContext context) : IRefreshSessionManager
+    AccountsWriteDbContext context) : IRefreshSessionManager
 {
     public async Task<Result<RefreshSession, Error>> GetByRefreshTokenAsync(
         Guid refreshToken, CancellationToken cancellationToken = default)

@@ -8,7 +8,7 @@ using PetFamily.Accounts.Domain.TypeAccounts;
 
 namespace PetFamily.Accounts.Infrastructure;
 
-public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
+public class AccountsWriteDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
 {
     private const string DATABASE = "PetFamilyDatabase";
     public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
@@ -23,8 +23,8 @@ public class AccountsDbContext(IConfiguration configuration) : IdentityDbContext
         
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(
-            typeof(AccountsDbContext).Assembly,
-            type => type.FullName?.Contains("Configurations") ?? false);
+            typeof(AccountsWriteDbContext).Assembly,
+            type => type.FullName?.Contains("Configurations.Write") ?? false);
         
         modelBuilder.Entity<User>()
             .ToTable("users");
