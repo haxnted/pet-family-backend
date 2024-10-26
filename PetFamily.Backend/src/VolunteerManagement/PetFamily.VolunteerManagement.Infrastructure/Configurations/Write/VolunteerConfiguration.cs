@@ -6,7 +6,6 @@ using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.EntityIds;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerManagement.Domain;
-using PetFamily.VolunteerManagement.Domain.ValueObjects;
 
 namespace PetFamily.VolunteerManagement.Infrastructure.Configurations.Write;
 
@@ -74,7 +73,10 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 output => Requisite.Create(output.Name, output.Description).Value)
             .HasColumnName("requisites");
 
-        builder.Property<bool>("_isDeleted")
+        builder.Property(p => p.DeletedAt)
+            .HasColumnName("deleted_at");
+        
+        builder.Property<bool>("IsDeleted")
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
 

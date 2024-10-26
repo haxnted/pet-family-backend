@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Volunteers_Initial : Migration
+    public partial class Accounts_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,13 +22,14 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     social_links = table.Column<string>(type: "jsonb", nullable: false),
                     requisites = table.Column<string>(type: "jsonb", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     age_experience = table.Column<int>(type: "integer", nullable: false),
                     name = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     patronymic = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     surname = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     general_description = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
-                    phone_number = table.Column<string>(type: "text", nullable: false)
+                    phone_number = table.Column<string>(type: "text", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,7 +51,6 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                     date_created = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     pet_photos = table.Column<string>(type: "jsonb", nullable: false),
                     requisites = table.Column<string>(type: "jsonb", nullable: false),
-                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
                     city = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     state = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
                     street = table.Column<string>(type: "character varying(50)", maxLength: 50, nullable: false),
@@ -62,7 +62,9 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                     phone_number = table.Column<string>(type: "text", nullable: false),
                     height = table.Column<double>(type: "double precision", nullable: false),
                     weight = table.Column<double>(type: "double precision", nullable: false),
-                    serial_number = table.Column<int>(type: "integer", nullable: false)
+                    serial_number = table.Column<int>(type: "integer", nullable: false),
+                    is_deleted = table.Column<bool>(type: "boolean", nullable: false),
+                    deleted_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: true)
                 },
                 constraints: table =>
                 {

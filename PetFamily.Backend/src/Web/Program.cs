@@ -5,6 +5,7 @@ using PetFamily.Species.Presentation;
 using PetFamily.VolunteerManagement.Infrastructure;
 using PetFamily.VolunteerManagement.Presentation;
 using Serilog;
+using SwaggerThemes;
 using Web;
 using Web.Extensions;
 using Web.Middlewares;
@@ -29,6 +30,7 @@ await accountSeeder.SeedAsync();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
+    app.UseSwaggerThemes(Theme.NordDark);
     app.UseSwaggerUI();
     await app.ApplyMigrations<SpeciesWriteDbContext>();
     await app.ApplyMigrations<VolunteersWriteDbContext>();

@@ -5,6 +5,7 @@ using PetFamily.Core.BackgroundServices;
 using PetFamily.Core.MessageQueues;
 using PetFamily.Core.Messaging;
 using PetFamily.Core.Providers.FileProvider;
+using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerManagement.Application;
 using PetFamily.VolunteerManagement.Domain.ValueObjects;
@@ -26,6 +27,11 @@ public static class DependencyInjection
         collection.AddMinioService(configuration);
         collection.AddSingleton<IMessageQueue<IEnumerable<FilePath>>, InMemoryMessageQueues<IEnumerable<FilePath>>>();
         collection.AddHostedService<FilesCleanerBackgroundService>();
+        collection.AddHostedService<EntitiesCleanerBackgroundService>();
+        
+        collection.AddScoped<IHardDeletableService, VolunteerServiceCleaner>();
+
+        collection.Configure<SoftDeleteInfo>(configuration.GetSection(SoftDeleteInfo.NAME_SECTION));
         return collection;
     }
 

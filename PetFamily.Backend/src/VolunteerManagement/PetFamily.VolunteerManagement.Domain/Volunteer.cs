@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.EntityIds;
-using PetFamily.SharedKernel.Interfaces;
 using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerManagement.Domain.Entities;
 using PetFamily.VolunteerManagement.Domain.Enums;
@@ -9,7 +8,7 @@ using PetFamily.VolunteerManagement.Domain.ValueObjects;
 
 namespace PetFamily.VolunteerManagement.Domain;
 
-public class Volunteer : SharedKernel.Entity<VolunteerId>, ISoftDeletable
+public class Volunteer : SoftDeletableEntity<VolunteerId>
 {
     private Volunteer(VolunteerId id) : base(id) { }
 
@@ -30,7 +29,6 @@ public class Volunteer : SharedKernel.Entity<VolunteerId>, ISoftDeletable
         RequisiteList = requisiteList.AsReadOnly();
     }
 
-    private bool _isDeleted = false;
     private List<Pet> _pets = [];
 
     public FullName FullName { get; private set; }
@@ -51,30 +49,31 @@ public class Volunteer : SharedKernel.Entity<VolunteerId>, ISoftDeletable
     {
         _pets.Add(pet);
         pet.ChangePosition(_pets.Count == 0 ? 1 : _pets.Count);
-        
     }
     
     public void HardRemovePet(Pet pet) =>
         _pets.Remove(pet);
     
-    public void Activate()
+    public override void Restore()
     {
-        _isDeleted = false;
+        base.Delete();
+        
         foreach (var pet in _pets)
-
-            pet.Activate();
+            pet.Restore();
     }
 
-    public void Deactivate()
+    public override void Delete()
     {
-        _isDeleted = true;
+        base.Delete();
 
         foreach (var pet in _pets)
-            pet.Deactivate();
+            pet.Delete();
     }
 
-    public Pet? GetPetById(PetId petId) =>
-        _pets.FirstOrDefault(x => x.Id == petId);
+    public void HardRemoveAllPets() => 
+        _pets.Clear();
+    
+    public Pet? GetPetById(PetId petId) => _pets.FirstOrDefault(x => x.Id == petId);
 
     public void UpdateMainInfo(FullName fullName,
         Description generalDescription,

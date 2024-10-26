@@ -13,8 +13,8 @@ using PetFamily.VolunteerManagement.Infrastructure;
 namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(VolunteersWriteDbContext))]
-    [Migration("20241022182210_Volunteers_Initial")]
-    partial class Volunteers_Initial
+    [Migration("20241026072034_Accounts_Initial")]
+    partial class Accounts_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,6 +41,10 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("date_created");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
                     b.Property<int>("HelpStatus")
                         .HasColumnType("integer")
                         .HasColumnName("help_status");
@@ -48,6 +52,10 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                     b.Property<bool>("IsCastrated")
                         .HasColumnType("boolean")
                         .HasColumnName("is_castrated");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsVaccinated")
                         .HasColumnType("boolean")
@@ -70,10 +78,6 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                     b.Property<Guid>("VolunteerId")
                         .HasColumnType("uuid")
                         .HasColumnName("volunteer_id");
-
-                    b.Property<bool>("_isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
 
                     b.ComplexProperty<Dictionary<string, object>>("Address", "PetFamily.VolunteerManagement.Domain.Entities.Pet.Address#Address", b1 =>
                         {
@@ -191,6 +195,14 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<DateTime?>("DeletedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("deleted_at");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_deleted");
+
                     b.Property<string>("RequisiteList")
                         .IsRequired()
                         .HasColumnType("jsonb")
@@ -200,10 +212,6 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("jsonb")
                         .HasColumnName("social_links");
-
-                    b.Property<bool>("_isDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
 
                     b.ComplexProperty<Dictionary<string, object>>("AgeExperience", "PetFamily.VolunteerManagement.Domain.Volunteer.AgeExperience#AgeExperience", b1 =>
                         {

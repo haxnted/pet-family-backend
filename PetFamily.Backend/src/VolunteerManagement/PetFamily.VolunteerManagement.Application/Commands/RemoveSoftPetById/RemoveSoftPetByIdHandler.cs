@@ -34,7 +34,7 @@ public class RemoveSoftPetByIdHandler(
         if (pet is null)
             return Errors.General.NotFound(petId).ToErrorList();
 
-        pet.Deactivate();
+        pet.Delete();
         await unitOfWork.SaveChanges(cancellationToken);
 
         logger.Log(LogLevel.Information, "Volunteer {VolunteerId} deactivated pet {PetId}", volunteerId, petId);
