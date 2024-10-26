@@ -5,8 +5,7 @@ using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.Core.Convertors;
 using PetFamily.SharedKernel.ValueObjects;
 
-
-namespace PetFamily.Accounts.Infrastructure.Configurations;
+namespace PetFamily.Accounts.Infrastructure.Configurations.Write;
 
 public class VolunteerAccountConfiguration : IEntityTypeConfiguration<VolunteerAccount>
 {

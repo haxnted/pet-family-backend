@@ -3,7 +3,7 @@ using PetFamily.Accounts.Domain.TypeAccounts;
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
-public class ParticipantAccountManager(AccountsDbContext context) : IParticipantAccountManager
+public class ParticipantAccountManager(AccountsWriteDbContext context) : IParticipantAccountManager
 {
     public async Task CreateParticipantAccountAsync(
         ParticipantAccount participantAccount, CancellationToken cancellationToken = default)
