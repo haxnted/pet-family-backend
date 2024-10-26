@@ -194,9 +194,7 @@ public class AddPetTests
             FullName.Create("John", "Doe", "sdfsfws").Value,
             Description.Create("General Description").Value,
             AgeExperience.Create(5).Value,
-            PhoneNumber.Create("7234567890").Value,
-            [],
-            []);
+            PhoneNumber.Create("7234567890").Value);
 
         for (int i = 0; i < petCount; i++)
         {
