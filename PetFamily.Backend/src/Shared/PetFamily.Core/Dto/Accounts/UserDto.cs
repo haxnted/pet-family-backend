@@ -11,7 +11,7 @@ public class UserDto
     public string PhotoPath { get; init; } = string.Empty;
     public List<SocialLinkDto> SocialLinks { get; init; } = [];
     
-    public AdminAccountDto? AdminAccountDto { get; set; }
-    public ParticipantAccountDto? ParticipantAccountDto { get; set; }
-    public VolunteerAccountDto? VolunteerAccountDto { get; set; }
+    public AdminAccountDto? AdminAccount { get; set; }
+    public ParticipantAccountDto? ParticipantAccount { get; set; }
+    public VolunteerAccountDto? VolunteerAccount { get; set; }
 }

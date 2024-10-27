@@ -45,9 +45,17 @@ public class UserDtoConfiguration : IEntityTypeConfiguration<UserDto>
                 json => JsonSerializer.Deserialize<List<SocialLinkDto>>(json, JsonSerializerOptions.Default)!,
                 ValueComparerConvertor.CreateValueComparer<SocialLinkDto>());
         
-        builder.Ignore(p => p.AdminAccountDto);
-        builder.Ignore(p => p.ParticipantAccountDto);
-        builder.Ignore(p => p.VolunteerAccountDto);
+        builder.HasOne(u => u.AdminAccount)
+            .WithOne()
+            .HasForeignKey<AdminAccountDto>(a => a.UserId);
+
+        builder.HasOne(u => u.ParticipantAccount)
+            .WithOne()
+            .HasForeignKey<ParticipantAccountDto>(p => p.UserId);
+
+        builder.HasOne(u => u.VolunteerAccount)
+            .WithOne()
+            .HasForeignKey<VolunteerAccountDto>(v => v.UserId);
             
     }
 }
