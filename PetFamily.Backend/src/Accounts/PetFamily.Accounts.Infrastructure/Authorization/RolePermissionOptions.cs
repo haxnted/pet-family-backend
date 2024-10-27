@@ -1,4 +1,4 @@
-﻿namespace PetFamily.Accounts.Infrastructure;
+﻿namespace PetFamily.Accounts.Infrastructure.Authorization;
 
 public class RolePermissionOptions
 {

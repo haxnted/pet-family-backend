@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PetFamily.Accounts.Domain;
 using PetFamily.Accounts.Domain.TypeAccounts;
+using PetFamily.Accounts.Infrastructure.Authorization;
 using PetFamily.Accounts.Infrastructure.IdentityManagers;
 using PetFamily.Framework;
 using PetFamily.SharedKernel.ValueObjects;

@@ -31,11 +31,6 @@ public class VolunteerDtoConfiguration : IEntityTypeConfiguration<VolunteerDto>
                 .HasMaxLength(Constants.MIN_TEXT_LENGTH)
                 .HasColumnName("patronymic");
         });
-        
-        builder.Property(p => p.Requisites)
-            .HasConversion(
-                values => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
-                json => JsonSerializer.Deserialize<IEnumerable<RequisiteDto>>(json, JsonSerializerOptions.Default)!);
 
         builder.HasMany(v => v.Pets)
             .WithOne()

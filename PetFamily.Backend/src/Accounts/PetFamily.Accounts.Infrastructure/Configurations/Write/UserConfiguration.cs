@@ -6,8 +6,7 @@ using PetFamily.Core.Convertors;
 using PetFamily.SharedKernel;
 using PetFamily.SharedKernel.ValueObjects;
 
-
-namespace PetFamily.Accounts.Infrastructure.Configurations;
+namespace PetFamily.Accounts.Infrastructure.Configurations.Write;
 
 public class UserConfiguration : IEntityTypeConfiguration<User>
 {

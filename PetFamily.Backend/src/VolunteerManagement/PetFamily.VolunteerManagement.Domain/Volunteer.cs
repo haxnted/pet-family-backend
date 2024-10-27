@@ -17,16 +17,12 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
         FullName fullName,
         Description generalDescription,
         AgeExperience ageExperience,
-        PhoneNumber number,
-        List<SocialLink> socialLinkList,
-        List<Requisite> requisiteList) : base(id)
+        PhoneNumber number) : base(id)
     {
         FullName = fullName;
         GeneralDescription = generalDescription;
         AgeExperience = ageExperience;
         PhoneNumber = number;
-        SocialLinkList = socialLinkList.AsReadOnly();
-        RequisiteList = requisiteList.AsReadOnly();
     }
 
     private List<Pet> _pets = [];
@@ -36,15 +32,7 @@ public class Volunteer : SoftDeletableEntity<VolunteerId>
     public AgeExperience AgeExperience { get; private set; }
     public PhoneNumber PhoneNumber { get; private set; }
     public IReadOnlyList<Pet> Pets => _pets;
-    public IReadOnlyList<SocialLink> SocialLinkList { get; private set; }
-    public IReadOnlyList<Requisite> RequisiteList { get; private set; }
-
-    public void UpdateSocialLinks(IReadOnlyList<SocialLink> list) =>
-        SocialLinkList = list;
-
-    public void UpdateRequisites(IReadOnlyList<Requisite> list) =>
-        RequisiteList = list;
-
+    
     public void AddPet(Pet pet)
     {
         _pets.Add(pet);

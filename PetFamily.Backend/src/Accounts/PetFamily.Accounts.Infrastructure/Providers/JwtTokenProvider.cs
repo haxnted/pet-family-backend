@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Application.Models;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Infrastructure.Authorization;
+using PetFamily.Accounts.Infrastructure.DbContexts;
 using PetFamily.Framework.Authorization;
 using PetFamily.SharedKernel;
 
@@ -15,7 +17,7 @@ namespace PetFamily.Accounts.Infrastructure.Providers;
 
 public class JwtTokenProvider(
     IOptions<JwtOptions> options,
-    AccountsDbContext context) : ITokenProvider
+    AccountsWriteDbContext context) : ITokenProvider
 {
     public JwtTokenResult GenerateAccessToken(User user)
     {

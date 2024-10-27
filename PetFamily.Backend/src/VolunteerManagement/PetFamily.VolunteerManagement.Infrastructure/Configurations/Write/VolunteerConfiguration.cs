@@ -60,19 +60,7 @@ public class VolunteerConfiguration : IEntityTypeConfiguration<Volunteer>
                 .HasColumnName("phone_number")
                 .IsRequired();
         });
-
-        builder.Property(v => v.SocialLinkList)
-            .HasValueObjectsJsonConversion(
-                input => new SocialLinkDto(input.Name, input.Url),
-                output => SocialLink.Create(output.Name, output.Url).Value)
-            .HasColumnName("social_links");
-
-        builder.Property(v => v.RequisiteList)
-            .HasValueObjectsJsonConversion(
-                input => new RequisiteDto(input.Name, input.Description),
-                output => Requisite.Create(output.Name, output.Description).Value)
-            .HasColumnName("requisites");
-
+        
         builder.Property(p => p.DeletedAt)
             .HasColumnName("deleted_at");
         

@@ -2,12 +2,13 @@
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Infrastructure.DbContexts;
 using PetFamily.SharedKernel;
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
 public class RefreshSessionManager(
-    AccountsDbContext context) : IRefreshSessionManager
+    AccountsWriteDbContext context) : IRefreshSessionManager
 {
     public async Task<Result<RefreshSession, Error>> GetByRefreshTokenAsync(
         Guid refreshToken, CancellationToken cancellationToken = default)
@@ -17,8 +18,7 @@ public class RefreshSessionManager(
             .FirstOrDefaultAsync(s => s.RefreshToken == refreshToken, cancellationToken);
         if (refreshSession is null)
             return Errors.General.NotFound();
-
-
+        
         return refreshSession;
     }
 

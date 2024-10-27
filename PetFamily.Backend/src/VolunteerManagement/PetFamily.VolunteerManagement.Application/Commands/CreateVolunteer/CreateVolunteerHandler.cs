@@ -54,9 +54,7 @@ public class CreateVolunteerHandler(
             fullName.Value,
             description.Value,
             ageExperience.Value,
-            phoneNumber.Value,
-            [..socialLinks],
-            [..requisites]);
+            phoneNumber.Value);
 
         logger.Log(LogLevel.Information, "Created new volunteer: {VolunteerId}", volunteerId);
 

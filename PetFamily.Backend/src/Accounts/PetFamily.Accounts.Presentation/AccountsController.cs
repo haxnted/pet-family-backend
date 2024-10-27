@@ -8,6 +8,7 @@ using PetFamily.Accounts.Application.Commands.Register;
 using PetFamily.Accounts.Application.Commands.UpdateAccountRequisites;
 using PetFamily.Accounts.Application.Commands.UpdateAccountSocialLinks;
 using PetFamily.Accounts.Application.Commands.UpdateFullName;
+using PetFamily.Accounts.Application.Queries;
 using PetFamily.Accounts.Domain;
 using PetFamily.Accounts.Domain.TypeAccounts;
 using PetFamily.Accounts.Presentation.Requests;
@@ -125,6 +126,19 @@ public class AccountsController : ApplicationController
         return Ok();
     }
 
+    [HttpGet("{userId:guid}")]
+    public async Task<IActionResult> GetUserWithRoles(
+        [FromRoute] Guid userId,
+        [FromServices] GetUserWithRolesHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var result = await handler.Execute(new GetUserWithRolesQuery(userId), cancellationToken);
+        if (result.IsFailure)
+            return result.Error.ToResponse();
+
+        return Ok(result.Value);
+    }
+    
     //test volunteer methods
     [HttpPost("registration-volunteer")]
     public async Task<IActionResult> CreateVolunteer(
