@@ -8,6 +8,8 @@ using Microsoft.IdentityModel.Tokens;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Application.Models;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Infrastructure.Authorization;
+using PetFamily.Accounts.Infrastructure.DbContexts;
 using PetFamily.Framework.Authorization;
 using PetFamily.SharedKernel;
 

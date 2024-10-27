@@ -6,7 +6,7 @@ using Microsoft.Extensions.Logging;
 using PetFamily.Accounts.Domain;
 using PetFamily.Accounts.Domain.TypeAccounts;
 
-namespace PetFamily.Accounts.Infrastructure;
+namespace PetFamily.Accounts.Infrastructure.DbContexts;
 
 public class AccountsWriteDbContext(IConfiguration configuration) : IdentityDbContext<User, Role, Guid>
 {

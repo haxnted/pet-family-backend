@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PetFamily.Accounts.Application;
 using PetFamily.Accounts.Domain;
+using PetFamily.Accounts.Infrastructure.DbContexts;
 using PetFamily.SharedKernel;
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
@@ -17,8 +18,7 @@ public class RefreshSessionManager(
             .FirstOrDefaultAsync(s => s.RefreshToken == refreshToken, cancellationToken);
         if (refreshSession is null)
             return Errors.General.NotFound();
-
-
+        
         return refreshSession;
     }
 
