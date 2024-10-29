@@ -61,6 +61,13 @@ public static class Errors
         }
     }
 
+    public static class Discussion
+    {
+        public static Error NonCreator(Guid id)
+        {
+            return Error.Conflict("invalid.owner.message", "You don't have rights to this message");
+        }
+    }
     public static class Model
     {
         public static Error AlreadyExist(string? name = null)
