@@ -1,6 +1,4 @@
-﻿
-using System.Data;
-using System.Runtime.InteropServices.JavaScript;
+﻿using System.Data;
 using CSharpFunctionalExtensions;
 using FluentAssertions;
 using FluentValidation;
