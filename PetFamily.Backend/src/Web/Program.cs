@@ -36,6 +36,14 @@ if (app.Environment.IsDevelopment())
     await app.ApplyMigrations<VolunteersWriteDbContext>();
 }
 
+app.UseCors(config =>
+{
+    config.WithOrigins("http://localhost:5173")
+        .AllowCredentials()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+});
+
 app.UseHttpLogging();
 app.UseSerilogRequestLogging();
 app.UseHttpsRedirection();
