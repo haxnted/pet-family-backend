@@ -11,7 +11,7 @@ public class Message : PetFamily.SharedKernel.Entity<MessageId>
     public Guid UserId { get; private set; }
     public bool IsEdited { get; private set; }
     public DateTime CreatedAt { get; private set; }
-
+    public DiscussionId DiscussionId { get; private set; }
     private Message(MessageId id) : base(id) { }
 
     public Message(MessageId id, Guid userId, Description text, bool isEdited, DateTime createdAt) : base(id)
