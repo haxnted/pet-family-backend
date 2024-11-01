@@ -1,17 +1,35 @@
 ﻿using Microsoft.OpenApi.Models;
+using PerFamily.Discussion.Presentation;
+using PetFamily.Accounts.Presentation;
+using PetFamily.Species.Presentation;
+using PetFamily.VolunteerManagement.Presentation;
+using PetFamily.VolunteerRequest.Presentation;
 using Serilog;
 
 namespace Web;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddWeb(this IServiceCollection collection)
+    public static void AddModules(this IServiceCollection collection, IConfiguration configuration)
     {
+        collection.AddSpeciesModule(configuration);
+        collection.AddVolunteerModule(configuration);
+        collection.AddAccountsModule(configuration);
+        collection.AddVolunteerRequestModule(configuration);
+        collection.AddDiscussionModule(configuration);
+    }
+
+    public static IServiceCollection AddProgramDependency(this IServiceCollection collection, IConfiguration configuration)
+    {
+        collection.AddModules(configuration);
         collection.AddControllers();
         collection.AddEndpointsApiExplorer();
         collection.AddSerilog();
         collection.AddAuthFieldInSwagger();
-        collection.AddHttpLogging(u => { u.CombineLogs = true; });
+        collection.AddHttpLogging(u =>
+        {
+            u.CombineLogs = true;
+        });
         collection.AddAuthorization();
         return collection;
     }

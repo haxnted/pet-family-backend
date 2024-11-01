@@ -8,6 +8,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\PerFamily.Discussion.Application\PerFamily.Discussion.Application.csproj" />
+      <ProjectReference Include="..\PerFamily.Discussion.Contracts\PerFamily.Discussion.Contracts.csproj" />
       <ProjectReference Include="..\PerFamily.Discussion.Domain\PerFamily.Discussion.Domain.csproj" />
       <ProjectReference Include="..\PerFamily.Discussion.Infrastructure\PerFamily.Discussion.Infrastructure.csproj" />
     </ItemGroup>
