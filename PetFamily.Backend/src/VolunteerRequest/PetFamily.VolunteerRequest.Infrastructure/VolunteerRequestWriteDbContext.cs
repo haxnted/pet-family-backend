@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using PetFamily.VolunteerRequest.Domain;
 
 namespace PetFamily.VolunteerRequest.Infrastructure;
 
@@ -8,7 +9,8 @@ public class VolunteerRequestWriteDbContext(IConfiguration configuration) : DbCo
 {
     private const string DATABASE = "PetFamilyDatabase";
     
-    public DbSet<Domain.VolunteerRequest> VolunteerRequests { get; set; }
+    public DbSet<Domain.VolunteerRequest> VolunteerRequests => Set<Domain.VolunteerRequest>();
+    public DbSet<UserRestriction> UserRestrictions => Set<UserRestriction>();
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

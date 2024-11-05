@@ -12,16 +12,15 @@ public static class DependencyInjection
 {
     public static void AddModules(this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.AddSpeciesModule(configuration);
+        collection.AddSpeciesModule();
         collection.AddVolunteerModule(configuration);
         collection.AddAccountsModule(configuration);
-        collection.AddVolunteerRequestModule(configuration);
+        collection.AddVolunteerRequestModule();
         collection.AddDiscussionModule(configuration);
     }
 
     public static IServiceCollection AddProgramDependency(this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.AddModules(configuration);
         collection.AddControllers();
         collection.AddEndpointsApiExplorer();
         collection.AddSerilog();
@@ -31,6 +30,7 @@ public static class DependencyInjection
             u.CombineLogs = true;
         });
         collection.AddAuthorization();
+        collection.AddModules(configuration);
         return collection;
     }
 

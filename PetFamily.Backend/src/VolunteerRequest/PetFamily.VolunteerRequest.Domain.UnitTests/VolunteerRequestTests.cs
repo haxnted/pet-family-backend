@@ -3,6 +3,7 @@ using PetFamily.SharedKernel.ValueObjects;
 using PetFamily.VolunteerRequest.Domain.EntityIds;
 using PetFamily.VolunteerRequest.Domain.ValueObjects;
 
+
 namespace PetFamily.VolunteerRequest.Domain.UnitTests;
 
 public class VolunteerRequestTests
@@ -21,12 +22,11 @@ public class VolunteerRequestTests
             []);
 
         // Act
-        var volunteerRequest = VolunteerRequest.CreateRequest(id, userId, discussionId, information);
+        var volunteerRequest = VolunteerRequest.CreateRequest(id, userId, information);
 
         // Assert
         volunteerRequest.Id.Should().Be(id);
         volunteerRequest.UserId.Should().Be(userId);
-        volunteerRequest.DiscussionId.Should().Be(discussionId);
         volunteerRequest.Information.Should().Be(information);
         volunteerRequest.CreatedAt.Should().BeCloseTo(DateTime.UtcNow, TimeSpan.FromSeconds(1));
         volunteerRequest.Status.Should().Be(TypeRequest.Submitted);
@@ -39,8 +39,9 @@ public class VolunteerRequestTests
         // Arrange
         var volunteerRequest = CreateDefaultVolunteerRequest();
 
+        var adminId = Guid.NewGuid();
         // Act
-        var result = volunteerRequest.Considered();
+        var result = volunteerRequest.Considered(adminId);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -68,7 +69,7 @@ public class VolunteerRequestTests
     {
         // Arrange
         var volunteerRequest = CreateDefaultVolunteerRequest();
-        var rejectionDescription = Description.Create("Not qualified enough").Value;
+        var rejectionDescription = ValueObjects.RejectionDescription.Create("Not qualified enough").Value;
 
         // Act
         var result = volunteerRequest.Reject(rejectionDescription);
@@ -84,7 +85,7 @@ public class VolunteerRequestTests
     {
         // Arrange
         var volunteerRequest = CreateDefaultVolunteerRequest();
-        var revisionDescription = Description.Create("More information needed").Value;
+        var revisionDescription = ValueObjects.RejectionDescription.Create("More information needed").Value;
 
         // Act
         var result = volunteerRequest.SendToRevision(revisionDescription);
@@ -99,13 +100,12 @@ public class VolunteerRequestTests
     {
         var id = VolunteerRequestId.NewId();
         var userId = Guid.NewGuid();
-        var discussionId = Guid.NewGuid();
         var information = new VolunteerInformation(FullName.Create("John", "Doe", null).Value,
             AgeExperience.Create(5).Value,
             PhoneNumber.Create("123-456-7890").Value,
             Description.Create("A volunteer with experience").Value,
             []);
 
-        return VolunteerRequest.CreateRequest(id, userId, discussionId, information);
+        return VolunteerRequest.CreateRequest(id, userId, information);
     }
 }

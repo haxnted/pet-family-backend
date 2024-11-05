@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Shared\PetFamily.Framework\PetFamily.Framework.csproj" />
       <ProjectReference Include="..\PerFamily.Discussion.Application\PerFamily.Discussion.Application.csproj" />
       <ProjectReference Include="..\PerFamily.Discussion.Contracts\PerFamily.Discussion.Contracts.csproj" />
       <ProjectReference Include="..\PerFamily.Discussion.Domain\PerFamily.Discussion.Domain.csproj" />

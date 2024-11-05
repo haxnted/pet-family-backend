@@ -19,11 +19,9 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
                 ValueComparerConvertor.CreateValueComparer<SocialLink>())
             .HasColumnName("social_links");
             
-        builder.HasOne(u => u.Role)
-            .WithMany(r => r.Users)
-            .HasForeignKey(u => u.RoleId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
+        builder.HasMany(u => u.Roles)
+            .WithMany(u=> u.Users);
+
         builder.ComplexProperty(pa => pa.FullName, pab =>
         {
             pab.Property(f => f.Name)

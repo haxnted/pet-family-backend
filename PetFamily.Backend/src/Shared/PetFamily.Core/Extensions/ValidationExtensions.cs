@@ -1,4 +1,5 @@
 using FluentValidation.Results;
+using Microsoft.AspNetCore.Identity;
 using PetFamily.SharedKernel;
 
 namespace PetFamily.Core.Extensions;
@@ -16,4 +17,8 @@ public static class ValidationExtensions
 
         return errors.ToList();
     }
+
+    public static ErrorList ToList(this IEnumerable<IdentityError> result) =>
+       new (result.Select(r => Error.Validation(r.Code, r.Description)));
+    
 }

@@ -15,9 +15,9 @@ public class GetBreedsBySpecialHandler(
     ILogger<GetSpeciesWithPaginationHandler> logger) : IQueryHandler<IEnumerable<BreedDto>, GetBreedsBySpecialQuery>
 {
     public async Task<Result<IEnumerable<BreedDto>, ErrorList>> Execute(GetBreedsBySpecialQuery query,
-        CancellationToken token = default)
+        CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(query, token);
+        var validationResult = await validator.ValidateAsync(query, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
 

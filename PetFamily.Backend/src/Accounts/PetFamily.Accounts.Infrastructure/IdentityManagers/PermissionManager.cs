@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using CSharpFunctionalExtensions;
+using Microsoft.EntityFrameworkCore;
 using PetFamily.Accounts.Domain;
 using PetFamily.Accounts.Infrastructure.DbContexts;
+using PetFamily.SharedKernel;
 
 namespace PetFamily.Accounts.Infrastructure.IdentityManagers;
 
@@ -24,14 +26,20 @@ public class PermissionManager(AccountsWriteDbContext context)
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<IEnumerable<string>?> GetPermissionsByUserId(
+    public async Task<Result<IEnumerable<string>,Error>> GetPermissionsByUserId(
         Guid userId, CancellationToken cancellationToken = default)
     {
         var user = await context.Users
-            .Include(u => u.Role)
+            .Include(u => u.Roles)
             .ThenInclude(r => r.RolePermissions)
             .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
-        return user?.Role.RolePermissions.Select(rp => rp.Permission.Code);
+        if (user is null)
+            return Errors.General.NotFound();
+
+        var permissions = user.Roles
+            .SelectMany(r => r.RolePermissions.Select(rp => rp.Permission.Code)).ToList();
+        
+        return permissions;
     }
 }

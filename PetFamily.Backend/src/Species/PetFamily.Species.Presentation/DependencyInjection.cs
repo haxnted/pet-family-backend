@@ -8,11 +8,10 @@ namespace PetFamily.Species.Presentation;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddSpeciesModule(
-        this IServiceCollection collection, IConfiguration configuration)
+    public static IServiceCollection AddSpeciesModule(this IServiceCollection collection)
     {
         return collection.AddScoped<ISpeciesContract, SpeciesContract>()
             .AddSpeciesApplication()
-            .AddSpeciesInfrastructure(configuration);
+            .AddSpeciesInfrastructure();
     }
 }
