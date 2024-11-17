@@ -1,4 +1,6 @@
-﻿namespace PetFamily.Core.Dto.VolunteerRequest;
+﻿using PetFamily.VolunteerRequest.Domain;
+
+namespace PetFamily.Core.Dto.VolunteerRequest;
 
 public class VolunteerRequestDto
 {
@@ -7,7 +9,7 @@ public class VolunteerRequestDto
     public Guid InspectorId { get; init; }
     public Guid DiscussionId { get; init; }
     public DateTime CreatedAt { get; init; }
-    public string? RejectionDescription { get; init; }
+    public string? RejectionDescription { get; init; } = string.Empty;
     public VolunteerInformationDto Information { get; init; } = default!;
-    public int Status { get; private set; }
+    public TypeRequest Status { get; init; }
 }
