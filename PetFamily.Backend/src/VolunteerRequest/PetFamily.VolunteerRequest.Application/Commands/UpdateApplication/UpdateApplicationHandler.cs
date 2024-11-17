@@ -25,7 +25,7 @@ public class UpdateApplicationHandler(
             return validationResult.ToList();
 
         var isUserBanned = await userRestrictionRepository.GetByUserId(command.ParticipantId, cancellationToken);
-        if (isUserBanned.IsSuccess && isUserBanned.Value.GetRemainingBanTime() != TimeSpan.Zero)
+        if (isUserBanned.IsSuccess && isUserBanned.Value.IsBanActive())
             return Errors.UserRestriction.AccessDeniedForBannedUser(command.ParticipantId).ToErrorList();
         
 

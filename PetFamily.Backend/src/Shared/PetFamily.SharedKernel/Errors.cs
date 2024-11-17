@@ -6,6 +6,11 @@ public static class Errors
 {
     public static class General
     {
+        public static Error NotOwner(Guid? id = null)
+        {
+            var Id = id == null ? "Id" : $"{id}";
+            return Error.Forbidden("not.owner", $"You are not the owner of {Id}");
+        }
         public static Error AccessDenied(string? resource = null)
         {
             var label = resource ?? "resource";
