@@ -9,10 +9,10 @@ namespace PerFamily.Discussion.Presentation;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddDiscussionModule(this IServiceCollection collection, IConfiguration configuration)
+    public static void AddDiscussionModule(this IServiceCollection collection, IConfiguration configuration)
     {
-        return collection.AddScoped<IDiscussionContract, DiscussionContract>()
+        collection.AddScoped<IDiscussionContract, DiscussionContract>()
             .AddDiscussionApplication()
-            .AddDiscussionInfrastructure(configuration);
+            .AddDiscussionInfrastructure();
     }
 }

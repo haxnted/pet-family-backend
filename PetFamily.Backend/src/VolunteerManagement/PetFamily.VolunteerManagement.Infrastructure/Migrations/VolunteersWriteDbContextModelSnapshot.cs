@@ -200,16 +200,6 @@ namespace PetFamily.VolunteerManagement.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_deleted");
 
-                    b.Property<string>("RequisiteList")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("SocialLinkList")
-                        .IsRequired()
-                        .HasColumnType("jsonb")
-                        .HasColumnName("social_links");
-
                     b.ComplexProperty<Dictionary<string, object>>("AgeExperience", "PetFamily.VolunteerManagement.Domain.Volunteer.AgeExperience#AgeExperience", b1 =>
                         {
                             b1.IsRequired();

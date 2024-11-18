@@ -23,13 +23,13 @@ public class PermissionRequirementHandler(IServiceScopeFactory serviceScopeFacto
         
         var contract = scope.ServiceProvider.GetRequiredService<IAccountContract>();
         var permissions = await contract.GetPermissionsUserById(userId);
-        if (permissions is null)
+        if (permissions.IsFailure)
         {
             context.Fail();
             return;
         }
         
-        if (permissions.Contains(permission.Code))
+        if (permissions.Value.Contains(permission.Code))
             context.Succeed(permission);
     }
 }

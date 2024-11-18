@@ -3,7 +3,7 @@
 namespace PetFamily.Framework;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public class ApplicationController : ControllerBase
 {
     public override OkObjectResult Ok(object? value)

@@ -27,6 +27,16 @@ public record Error
 
     public static Error Conflict(string code, string message, string? invalidField = null) =>
         new(code, message, ErrorType.Conflict, invalidField);
+    
+    public static Error Authorization(string code, string message, string? invalidField = null) =>
+        new(code, message, ErrorType.Authorization, invalidField);
+
+    public static Error Authentication(string code, string message, string? invalidField = null) =>
+        new(code, message, ErrorType.Authentication, invalidField);
+
+    public static Error Forbidden(string code, string message, string? invalidField = null) =>
+        new(code, message, ErrorType.Forbidden, invalidField);
+
 
     public string Serialize() => string.Join(SEPARATOR, Code, Message, Type);
 
@@ -41,6 +51,7 @@ public record Error
 
         return new Error(parts[0], parts[1], type);
     }
+
     public ErrorList ToErrorList() => new([this]);
 }
 
@@ -49,5 +60,8 @@ public enum ErrorType
     Validation,
     NotFound,
     Failure,
-    Conflict
+    Conflict,
+    Authorization,
+    Authentication,
+    Forbidden
 }

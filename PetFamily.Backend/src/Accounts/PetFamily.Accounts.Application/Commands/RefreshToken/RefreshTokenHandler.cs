@@ -93,14 +93,3 @@ public class RefreshTokenHandler(
         return userJti;
     }
 }
-
-public record RefreshTokenCommand(string AccessToken, Guid RefreshToken) : ICommand;
-
-public class RefreshTokenValidator : AbstractValidator<RefreshTokenCommand>
-{
-    public RefreshTokenValidator()
-    {
-        RuleFor(r => r.AccessToken).NotEmpty();
-        RuleFor(r => r.RefreshToken).NotEmpty();
-    }
-}

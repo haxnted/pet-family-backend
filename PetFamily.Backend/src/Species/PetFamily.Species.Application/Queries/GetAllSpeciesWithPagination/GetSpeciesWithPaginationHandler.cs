@@ -15,9 +15,9 @@ public class GetSpeciesWithPaginationHandler(
     IValidator<GetSpeciesWithPaginationQuery> validator,
     ILogger<GetSpeciesWithPaginationHandler> logger) : IQueryHandler<PagedList<SpeciesDto>,GetSpeciesWithPaginationQuery>
 {
-    public async Task<Result<PagedList<SpeciesDto>, ErrorList>> Execute(GetSpeciesWithPaginationQuery query, CancellationToken token = default)
+    public async Task<Result<PagedList<SpeciesDto>, ErrorList>> Execute(GetSpeciesWithPaginationQuery query, CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(query, token);
+        var validationResult = await validator.ValidateAsync(query, cancellationToken);
         if (validationResult.IsValid == false)
             return validationResult.ToList();
         
@@ -29,7 +29,7 @@ public class GetSpeciesWithPaginationHandler(
             ? speciesQuery.OrderByDescending(keySelector => keySelector.TypeAnimal)
             : speciesQuery.OrderBy(keySelector => keySelector.TypeAnimal);
 
-        var result = await speciesQuery.GetObjectsWithPagination(query.Page, query.PageSize, token);
+        var result = await speciesQuery.GetObjectsWithPagination(query.Page, query.PageSize, cancellationToken);
 
         logger.Log(LogLevel.Information,
             "Get species with pagination Page: {Page}, PageSize: {PageSize}, TotalCount: {TotalCount}",

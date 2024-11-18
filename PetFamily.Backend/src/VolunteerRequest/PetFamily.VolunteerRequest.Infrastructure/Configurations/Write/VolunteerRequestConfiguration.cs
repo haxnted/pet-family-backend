@@ -19,12 +19,16 @@ public class VolunteerRequestConfiguration : IEntityTypeConfiguration<Domain.Vol
             .HasConversion(
                 id => id.Id,
                 value => VolunteerRequestId.Create(value));
-        
 
-        builder.ComplexProperty(v => v.RejectionDescription, vb =>
+        builder.Property(p => p.InspectorId)
+            .HasColumnName("inspector_id");
+
+        builder.Property(v => v.UserId)
+            .HasColumnName("user_id");
+        
+        builder.OwnsOne(v => v.RejectionDescription, vb =>
         {
             vb.Property(d => d.Value)
-                .IsRequired(false)
                 .HasMaxLength(Constants.EXTRA_TEXT_LENGTH)
                 .HasColumnName("rejection_description");
         });
@@ -44,7 +48,7 @@ public class VolunteerRequestConfiguration : IEntityTypeConfiguration<Domain.Vol
                     .HasColumnName("surname");
 
                 vib.Property(v => v.Patronymic)
-                    .IsRequired()
+                    .IsRequired(false)
                     .HasMaxLength(Constants.MIN_TEXT_LENGTH)
                     .HasColumnName("patronymic");
             });
@@ -53,7 +57,7 @@ public class VolunteerRequestConfiguration : IEntityTypeConfiguration<Domain.Vol
             {
                 vib.Property(d => d.Value)
                     .HasMaxLength(Constants.EXTRA_TEXT_LENGTH)
-                    .HasColumnName("rejection_description")
+                    .HasColumnName("volunteer_description")
                     .IsRequired();
             });
             
@@ -70,13 +74,13 @@ public class VolunteerRequestConfiguration : IEntityTypeConfiguration<Domain.Vol
                     .IsRequired()
                     .HasColumnName("number");
             });
-
-            vb.Property(v => v.SocialLinks)
+            
+            vb.Property(v => v.Requisites)
                 .HasConversion(
                     u => JsonSerializer.Serialize(u, JsonSerializerOptions.Default),
-                    json => JsonSerializer.Deserialize<List<SocialLink>>(json, JsonSerializerOptions.Default)!,
-                    ValueComparerConvertor.CreateValueComparer<SocialLink>())
-                .HasColumnName("social_links");
+                    json => JsonSerializer.Deserialize<List<Requisite>>(json, JsonSerializerOptions.Default)!,
+                    ValueComparerConvertor.CreateValueComparer<Requisite>())
+                .HasColumnName("requisites");
         });
     }
 }

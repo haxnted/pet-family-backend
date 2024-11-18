@@ -7,10 +7,9 @@ public class User : IdentityUser<Guid>
 {
     public string PhotoPath { get; init; } = string.Empty;
     public FullName FullName { get; set; } = default!;
-    public List<SocialLink> SocialLinks { get; set; } = [];
-    public Guid RoleId { get; init; }
-    public Role Role { get; init; } = default!;
-    
+    public List<SocialLink> SocialLinks { get; set; } 
+    private List<Role> _roles = [];
+    public IReadOnlyList<Role> Roles => _roles;
     public static User CreateAdmin(FullName fullName, string userName, string email, Role role)
     {
         return new User
@@ -20,7 +19,7 @@ public class User : IdentityUser<Guid>
             SocialLinks = [],
             UserName = userName,
             Email = email,
-            Role = role
+            _roles = [role]
         };
     }
     
@@ -33,7 +32,7 @@ public class User : IdentityUser<Guid>
             SocialLinks = [],
             UserName = userName,
             Email = email,
-            Role = role
+            _roles = [role]
         };
     }
 }

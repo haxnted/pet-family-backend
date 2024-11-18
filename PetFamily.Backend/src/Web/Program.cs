@@ -1,3 +1,4 @@
+using PetFamily.Accounts.Infrastructure.Seeding;
 using Serilog;
 using SwaggerThemes;
 using Web;
@@ -12,6 +13,10 @@ builder.AddConfigureLogging();
 builder.Services.AddProgramDependency(builder.Configuration);
 
 var app = builder.Build();
+app.Services.RunMigrations();
+
+var accountSeeder = app.Services.GetRequiredService<AccountsSeeder>();
+await accountSeeder.SeedAsync();
 
 app.UseExceptionMiddleware();
 

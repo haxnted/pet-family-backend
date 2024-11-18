@@ -2,7 +2,7 @@
 
 namespace PetFamily.VolunteerRequest.Domain.ValueObjects;
 
-public class VolunteerInformation
+public record VolunteerInformation
 {
     private VolunteerInformation() { }
 
@@ -11,18 +11,18 @@ public class VolunteerInformation
         AgeExperience ageExperience, 
         PhoneNumber phoneNumber,
         Description description,
-        List<SocialLink> socialLinks)
+        List<Requisite> requisites)
     {
         FullName = fullName;
         AgeExperience = ageExperience;
         PhoneNumber = phoneNumber;
         Description = description;
-        SocialLinks = socialLinks;
+        Requisites = requisites;
     }
 
-    public FullName FullName { get; private set; }
-    public AgeExperience AgeExperience { get; private set; }
-    public PhoneNumber PhoneNumber { get; private set; }
-    public Description Description { get; private set; }
-    public List<SocialLink> SocialLinks { get; private set; }
+    public FullName FullName { get; }
+    public AgeExperience AgeExperience { get;}
+    public PhoneNumber PhoneNumber { get; }
+    public Description Description { get; }
+    public List<Requisite> Requisites { get; }
 }

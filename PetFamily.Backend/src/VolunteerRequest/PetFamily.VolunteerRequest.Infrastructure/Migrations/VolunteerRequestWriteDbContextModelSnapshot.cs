@@ -24,6 +24,36 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("PetFamily.VolunteerRequest.Domain.UserRestriction", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("BannedUntil")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("banned_until");
+
+                    b.Property<Guid>("ParticipantId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Reason", "PetFamily.VolunteerRequest.Domain.UserRestriction.Reason#RejectionDescription", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("reason_description");
+                        });
+
+                    b.HasKey("Id")
+                        .HasName("pk_user_restrictions");
+
+                    b.ToTable("user_restrictions", "volunteer_requests");
+                });
+
             modelBuilder.Entity("PetFamily.VolunteerRequest.Domain.VolunteerRequest", b =>
                 {
                     b.Property<Guid>("Id")
@@ -38,24 +68,17 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("discussion_id");
 
+                    b.Property<Guid>("InspectorId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("inspector_id");
+
                     b.Property<int>("Status")
                         .HasColumnType("integer")
                         .HasColumnName("status");
 
-                    b.Property<Guid>("UserId")
+                    b.Property<Guid>("ParticipantId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("RejectionDescription", "PetFamily.VolunteerRequest.Domain.VolunteerRequest.RejectionDescription#Description", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .ValueGeneratedOnUpdateSometimes()
-                                .HasMaxLength(2000)
-                                .HasColumnType("character varying(2000)")
-                                .HasColumnName("rejection_description");
-                        });
 
                     b.HasKey("Id")
                         .HasName("pk_volunteer_requests");
@@ -65,16 +88,37 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 
             modelBuilder.Entity("PetFamily.VolunteerRequest.Domain.VolunteerRequest", b =>
                 {
+                    b.OwnsOne("PetFamily.VolunteerRequest.Domain.ValueObjects.RejectionDescription", "RejectionDescription", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerRequestId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("character varying(2000)")
+                                .HasColumnName("rejection_description");
+
+                            b1.HasKey("VolunteerRequestId");
+
+                            b1.ToTable("volunteer_requests", "volunteer_requests");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerRequestId")
+                                .HasConstraintName("fk_volunteer_requests_volunteer_requests_id");
+                        });
+
                     b.OwnsOne("PetFamily.VolunteerRequest.Domain.ValueObjects.VolunteerInformation", "Information", b1 =>
                         {
                             b1.Property<Guid>("VolunteerRequestId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("id");
 
-                            b1.Property<string>("SocialLinks")
+                            b1.Property<string>("Requisites")
                                 .IsRequired()
                                 .HasColumnType("text")
-                                .HasColumnName("social_links");
+                                .HasColumnName("requisites");
 
                             b1.HasKey("VolunteerRequestId");
 
@@ -111,10 +155,9 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 
                                     b2.Property<string>("Value")
                                         .IsRequired()
-                                        .ValueGeneratedOnUpdateSometimes()
                                         .HasMaxLength(2000)
                                         .HasColumnType("character varying(2000)")
-                                        .HasColumnName("rejection_description");
+                                        .HasColumnName("volunteer_description");
 
                                     b2.HasKey("VolunteerInformationVolunteerRequestId");
 
@@ -138,7 +181,6 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
                                         .HasColumnName("name");
 
                                     b2.Property<string>("Patronymic")
-                                        .IsRequired()
                                         .HasMaxLength(50)
                                         .HasColumnType("character varying(50)")
                                         .HasColumnName("patronymic");
@@ -193,6 +235,8 @@ namespace PetFamily.VolunteerRequest.Infrastructure.Migrations
 
                     b.Navigation("Information")
                         .IsRequired();
+
+                    b.Navigation("RejectionDescription");
                 });
 #pragma warning restore 612, 618
         }

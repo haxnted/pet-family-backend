@@ -13,8 +13,8 @@ using PerFamily.Discussion.Infrastructure;
 namespace PerFamily.Discussion.Infrastructure.Migrations
 {
     [DbContext(typeof(DiscussionWriteDbContext))]
-    [Migration("20241030122308_Discussions_Initial")]
-    partial class Discussions_Initial
+    [Migration("20241105102054_Discussion_Initial")]
+    partial class Discussion_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -6,8 +6,7 @@ namespace PetFamily.Species.Infrastructure;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddSpeciesInfrastructure(this IServiceCollection collection,
-        IConfiguration configuration)
+    public static IServiceCollection AddSpeciesInfrastructure(this IServiceCollection collection)
     {
         collection.AddScoped<SpeciesWriteDbContext>();
         collection.AddScoped<ISpeciesReadDbContext, SpeciesReadDbContext>();

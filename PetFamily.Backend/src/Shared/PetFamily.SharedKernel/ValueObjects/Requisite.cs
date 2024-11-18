@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 
 namespace PetFamily.SharedKernel.ValueObjects;
 
@@ -7,6 +8,7 @@ public record Requisite
     public string Name { get; }
     public string Description { get; }
     
+    [JsonConstructor]
     private Requisite(string name, string description)
     {
         Name = name;

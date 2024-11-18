@@ -12,7 +12,10 @@ public class Message : PetFamily.SharedKernel.Entity<MessageId>
     public bool IsEdited { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DiscussionId DiscussionId { get; private set; }
-    private Message(MessageId id) : base(id) { }
+
+    private Message(MessageId id) : base(id)
+    {
+    }
 
     public Message(MessageId id, Guid userId, Description text, bool isEdited, DateTime createdAt) : base(id)
     {
@@ -22,6 +25,9 @@ public class Message : PetFamily.SharedKernel.Entity<MessageId>
         CreatedAt = createdAt;
     }
 
+    public static Message Create(MessageId id, Guid userId, Description text) =>
+        new(id, userId, text, false, DateTime.UtcNow);
+
     public UnitResult<Error> UpdateText(string text)
     {
         var newText = Description.Create(text);
@@ -30,7 +36,7 @@ public class Message : PetFamily.SharedKernel.Entity<MessageId>
 
         Text = newText.Value;
         IsEdited = true;
-        
+
         return UnitResult.Success<Error>();
     }
 }

@@ -1,6 +1,8 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using System.Text.Json.Serialization;
+using Microsoft.OpenApi.Models;
 using PerFamily.Discussion.Presentation;
 using PetFamily.Accounts.Presentation;
+using PetFamily.Framework;
 using PetFamily.Species.Presentation;
 using PetFamily.VolunteerManagement.Presentation;
 using PetFamily.VolunteerRequest.Presentation;
@@ -12,17 +14,22 @@ public static class DependencyInjection
 {
     public static void AddModules(this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.AddSpeciesModule(configuration);
+        collection.AddSpeciesModule();
         collection.AddVolunteerModule(configuration);
         collection.AddAccountsModule(configuration);
-        collection.AddVolunteerRequestModule(configuration);
+        collection.AddVolunteerRequestModule();
         collection.AddDiscussionModule(configuration);
     }
 
-    public static IServiceCollection AddProgramDependency(this IServiceCollection collection, IConfiguration configuration)
+    public static IServiceCollection AddProgramDependency(
+        this IServiceCollection collection, IConfiguration configuration)
     {
-        collection.AddModules(configuration);
-        collection.AddControllers();
+        collection.AddFramework();
+        collection.AddControllers()
+            .AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
         collection.AddEndpointsApiExplorer();
         collection.AddSerilog();
         collection.AddAuthFieldInSwagger();
@@ -31,6 +38,7 @@ public static class DependencyInjection
             u.CombineLogs = true;
         });
         collection.AddAuthorization();
+        collection.AddModules(configuration);
         return collection;
     }
 

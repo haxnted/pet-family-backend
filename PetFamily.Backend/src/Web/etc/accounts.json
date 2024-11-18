@@ -1,6 +1,7 @@
 {
   "Roles": {
     "Volunteer": [
+      "user.get.volunteer.request",
       "volunteer.update",
       "volunteer.delete",
       "volunteer.update.requisites",
@@ -11,19 +12,33 @@
       "user.update.fullname"
     ],
     "Participant": [
+      "user.get.volunteer.requests",
+      "user.get.volunteer.request",
+      "user.сreate.application",
       "volunteer.create",
       "user.update.sociallinks",
       "user.update.fullname"
     ],
     "Admin": [
+      "admin.get.volunteer.requests",
+      "user.get.volunteer.request",
       "species.create",
       "species.update",
       "species.delete",
-      "user.update.fullname"
+      "user.update.fullname",
+      "admin.review.application",
+      "admin.approve.application",
+      "admin.send.to.revision",
+      "admin.reject.application",
+      "admin.ban.user",
+      "admin.unban.user",
+      "admin.extend.ban.user",
+      "users.get.banned"
     ]
   },
   "Permissions": {
     "Volunteer": [
+      "user.get.volunteer.request",
       "volunteer.update",
       "volunteer.delete",
       "volunteer.update.requisites",
@@ -34,15 +49,28 @@
       "user.update.fullname"
     ],
     "Participant": [
+      "user.get.volunteer.requests",
+      "user.get.volunteer.request",
+      "user.сreate.application",
       "volunteer.create",
       "user.update.sociallinks",
       "user.update.fullname"
     ],
     "Admin": [
+      "admin.get.volunteer.requests",
+      "user.get.volunteer.request",
       "species.create",
       "species.update",
       "species.delete",
-      "user.update.fullname"
+      "user.update.fullname",
+      "admin.review.application",
+      "admin.approve.application",
+      "admin.send.to.revision",
+      "admin.reject.application",
+      "admin.ban.user",
+      "admin.unban.user",
+      "admin.extend.ban.user",
+      "users.get.banned"
     ]
   }
 }

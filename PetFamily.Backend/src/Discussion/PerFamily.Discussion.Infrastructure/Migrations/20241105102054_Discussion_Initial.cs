@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PerFamily.Discussion.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Discussions_Initial : Migration
+    public partial class Discussion_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

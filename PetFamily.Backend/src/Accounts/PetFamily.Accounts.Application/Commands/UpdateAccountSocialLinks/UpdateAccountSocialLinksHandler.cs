@@ -14,9 +14,9 @@ public class UpdateAccountSocialLinksHandler(
     UserManager<User> userManager) : ICommandHandler<UpdateAccountSocialLinksCommand>
 {
     public async Task<UnitResult<ErrorList>> Execute(
-        UpdateAccountSocialLinksCommand command, CancellationToken token = default)
+        UpdateAccountSocialLinksCommand command, CancellationToken cancellationToken = default)
     {
-        var validationResult = await validator.ValidateAsync(command, token);
+        var validationResult = await validator.ValidateAsync(command, cancellationToken);
         if (!validationResult.IsValid)
             return validationResult.ToList();
 

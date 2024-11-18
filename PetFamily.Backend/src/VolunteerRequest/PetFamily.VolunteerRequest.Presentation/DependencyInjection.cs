@@ -9,11 +9,10 @@ namespace PetFamily.VolunteerRequest.Presentation;
 
 public static class DependencyInjection
 {
-    public static IServiceCollection AddVolunteerRequestModule(
-        this IServiceCollection collection, IConfiguration configuration)
+    public static void AddVolunteerRequestModule(this IServiceCollection collection)
     {
-        return collection.AddScoped<IVolunteerRequestContract, VolunteerRequestContract>()
+        collection.AddScoped<IVolunteerRequestContract, VolunteerRequestContract>()
             .AddVolunteerRequestApplication()
-            .AddVolunteerRequestInfrastructure(configuration);
+            .AddVolunteerRequestInfrastructure();
     }
 }
