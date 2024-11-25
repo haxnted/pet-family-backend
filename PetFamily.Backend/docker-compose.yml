@@ -1,4 +1,20 @@
 ﻿services:
+  web:
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+    container_name: PetFamily.Web
+    restart: always
+    ports:
+      - "8080:80"
+    depends_on:
+      - postgres
+      - seq
+      - minio
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+    volumes:
+          - ./src/Web:/.env
   postgres:
     container_name: PetFamily.Postgres
     image: postgres:latest
@@ -18,20 +34,28 @@
     environment:
       - ACCEPT_EULA=Y
     ports:
-      - 5341:5341
-      - 8081:80
-  
+      - "5341:5341"
+      - "8081:80"
   minio:
     container_name: PetFamily.Minio
     image: minio/minio
     restart: always
     ports:
-      - 9000:9000
-      - 9001:9001
+      - "9000:9000"
+      - "9001:9001"
     volumes:
       - minio_data:/data
     command: server --console-address ":9001" /data
-
+  nginx:
+    container_name: PetFamily.Nginx
+    image: nginx:latest
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - web
 volumes:
   postgres-data:
   minio_data:
